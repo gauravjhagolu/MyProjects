@@ -1,0 +1,3613 @@
+
+/*
+_______________________________________________________________________________________________
+  ***************************************************************************
+	  this is a music related turbo c++ program
+	  in this program you have a virtual piano on your screen
+			     AND
+	   a pattern maker from which you can compose your own tunes
+	   made by :GAURAV JHA  XII   JNV    
+                   contact:  @gauravjhagolu   
+                   email:     ironhulk360@gmail.com
+	           made from turbo c++
+             !!!!!!       !!!!!!!
+                         
+  ******************************************************************************
+_____________________________________________________________________________________________________*/
+#include"graphics.h"
+#include"fstream.h"
+#include"string.h"
+#include"stdlib.h"
+#include"conio.h"
+#include"dos.h"
+#include "process.h"
+#include "stdio.h"
+////____________global declarations________________________
+int g=0,m,button,x,y;
+union REGS i,o;
+int skinvar=0,bkcolor=0,maincolor,op=0;
+char skn1='a',ch,skn,bkchar[1],colorchar[1];
+////______________________________________________________________
+/////__________________________________________________________
+struct skin1     //////structure of first skin
+{public:
+	 void circle_button_boundary(int circx,int circy,int circr);
+	 void circle_button_boundary2(int circ2x,int circ2y,int circ2r);
+	 void draw_composer_page();
+	 void draw_pattern_maker_page();
+	 void home_menu();
+	 void background(int bkcolor);
+	 void tittle_bar1();
+	 void tittle_bar2();
+};//////end of skin 1 structure////
+struct skin2    ////////structure of 2nd skin
+{  public:
+	 void rectangle_button_boundary(int recx1,int recy1,int recx2,int recy2);
+	 void draw_composer_page();
+	 void draw_pattern_maker_page();
+	 void background();
+	 void home_menu();
+	 void tittle_bar1();
+	 void tittle_bar2();
+};///////////  end of skin 2 structure
+class common     ///class for common things
+{
+       char filename2[20],bk,k;
+       int m1,m2,m3,go,ar,key,bc,b,i1,i2,d2,poly[7],q,tx,ty;
+       int pix,mode,stop,df,record,pdel;
+       char h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18,h19,h20;
+       char d,k1,var2,filename[20],filename1[20];
+       int del,del2,pye,page,op,clr,bd,tone,kcolor,ext;
+       int rx,ry,pv,sa,ss,sd,sf,sg,sh,sj,sk,sl,sc,sw,se,st,sy,su,so,sp,sz,sx,sq,sa_1,sa_2,sa_3;
+  public:
+	   common()      ////constructor
+	  {
+	     pix=0;mode=1;stop=0;df=50;record=0;pdel=3;
+	     h1='a';h2='s';h3='d';h4='f';h5='g';h6='h';h7='j';h8='k';h9='l';h10='c';h11='z';h12='q';
+	     h13='w';h14='e';h15='t';h16='y';h17='u';h18='o';h19='p';h20='x';
+	     d='q';k1='b'; del=70;del2=45;pye=0;page=1;bd=0;tone=1;
+	     sa=440;ss=495;sd=550;sf=587;sg=660;sh=733;sj=825;sk=880;sl=990;sc=1100;
+	     sw=460;se=524;st=622;sy=699;su=777;so=932;sp=1049;sz=1149;sx=1240;sq=1300;sa_1=410;sa_2=385;sa_3=365;
+	  }
+	 ~common(){}
+	 int initmouse();
+	 void showmouseptr();
+	 void hidemouseptr();
+	 void restrictmouseptr(int,int,int,int);
+	 void getmousepos(int *,int *, int *);
+	 void logo2();
+	 void error();
+	 void error2();
+	 void error3();
+	 void about_page(int);
+	 void draw_ellipse(int);
+	 void draw_ellipse1(int);
+	 void taar();
+	 void rec(int,int);
+	 void composer_help();
+	 void patt_help();
+	 void draw_speakers(int ,int);
+	 void gole1(int,int);
+	 void gole2(int,int);
+	 void sound_line1(int);
+	 void sound_line2(int);
+	 void main_text(int txtx,int txty);
+	 void color_icon(int colx,int coly);
+	 void small_logo(int slogox,int slogoy);
+	 void main_text_small(int stxtx,int stxty);
+	 void eraser_icon(int ersx,int ersy);
+	 void pencil_icon(int pnclx,int pncly);
+	 void triangle(int tx,int ty);
+	 void composer_icon(int compx,int compy);
+	 void composer_small_icon(int compsx,int compsy);
+	 void pattern_maker_icon(int pmx,int pmy);
+	 void about_icon(int abtx,int abty);
+	 void pattern_maker_small_icon(int pmsx,int pmsy);
+	 void save_icon(int svx,int svy);
+	 void fill_button(int fillx,int filly);
+	 void play_icon(int playx,int playy);
+	 void stop_icon(int stopx,int stopy);
+	 void stop_icon2(int stop2x,int stop2y);
+	 void new_icon(int nwx,int nwy);
+	 void open_icon(int opx,int opy);
+	 void record_icon(int recx,int recy);
+	 void key_loop();
+	 void key_loop2();
+	 void settings_button(int setx,int sety);
+	 void exit_button(int exitx,int exity);
+	 void small_wrong_icon(int wrngx,int wrngy);  //
+	 void help_icon(int hlpx,int hlpy);         //
+	 void right_icon(int rx,int ry);
+	 void wrong_icon(int wx,int wy);
+	 void back_icon(int bkx,int bky);           //
+	 void skin_icon(int sknx,int skny);
+	 void bkground_icon(int bkgx,int bkgy);
+	 void home_conditions();
+	 void composer_conditions();
+	 void pattern_maker_conditions();           //
+	 void about();
+	 void doexit();
+	 void  help(int hvar);
+	 void settings();
+	 void doplay();
+	 void doplay1();
+	 void donew();
+	 void keya(int kcolor);
+	 void keys(int kcolor);
+	 void keyd(int kcolor);
+	 void keyf(int kcolor);
+	 void keyg(int kcolor);
+	 void keyh(int kcolor);
+	 void keyj(int kcolor);
+	 void keyk(int kcolor);
+	 void keyl(int kcolor);
+	 void keyc(int kcolor);  //for ; :
+	 void keyz(int kcolor);  //for ' "
+	 void keyx(int kcolor);  //for ] }
+	 void keyq(int kcolor);  //for enter key
+	 void keyw(int kcolor);
+	 void keye(int kcolor);
+	 void keyt(int kcolor);
+	 void keyy(int kcolor);
+	 void keyu(int kcolor);
+	 void keyo(int kcolor);
+	 void keyp(int kcolor);
+	 void tone1(int t2x,int t2y);
+	 void tone2(int t2x,int t2y);
+	 void tone3(int t3x,int t3y);
+	 void tone2_conditions();
+	 void tone3_conditions();
+	 void tone_conditions();
+	 void sound_with_mouse();
+	 void sound_with_mouse2();
+		  ///h means horizontal////
+	 void hkeya_1(int kcolor);  //key which is not on keybord
+	 void hkeya_3(int kcolor) ; //key which is not on keybord
+	 void hkeya(int kcolor);
+	 void hkeys(int kcolor);
+	 void hkeyd(int kcolor);
+	 void hkeyf(int kcolor);
+	 void hkeyg(int kcolor);
+	 void hkeyh(int kcolor);
+	 void hkeyj(int kcolor);
+	 void hkeyk(int kcolor);
+	 void hkeyl(int kcolor);
+	 void hkeyc(int kcolor);  //for ; :
+	 void hkeyz(int kcolor);  //for ' "
+	 void hkeyx(int kcolor);  //for ] }
+	 void hkeyq(int kcolor);  //for enter key
+	 void hkeyw(int kcolor);
+	 void hkeye(int kcolor);
+	 void hkeyt(int kcolor);
+	 void hkeyy(int kcolor);
+	 void hkeyu(int kcolor);
+	 void hkeyo(int kcolor);
+	 void hkeyp(int kcolor);
+	 void hkeya_2(int kcolor) ;
+	 void check(int bc);
+	 void doopen();
+	 void dosave();
+};/////////////////  end of common class
+fstream skin,r,rc;
+common c;
+skin1 s1;
+skin2 s2;
+//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+ void main()
+{ //////////////      *ting of main function        //////////
+	 initgraph(&g,&m,"");
+	int maxx=getmaxx();
+	int maxy=getmaxy();
+	setviewport(1,1,maxx-1,maxy-1,1);
+	if(c.initmouse() ==0)
+	{
+		closegraph();
+		restorecrtmode();
+		printf("Mouse driver not loaded");
+		exit (1);
+	}
+	c.restrictmouseptr (1,1,maxx-1,maxy-1);
+	skin.open("skin.txt",ios::in);
+      if(!skin)
+      {
+	cout<<"\n..unable to open skin.txt..\n";
+	c.error(); //gives message to solve the error
+	getch();
+      }
+      else if(skin) //if file opens
+     {
+      skin.seekg(-1,ios::end);
+      skin.read((char*)&skn,sizeof(skn));   //reads last value in the file(skin.txt)
+      skin.close();
+	 if(strcmp((char*)skn,(char*)skn1)==0)
+	{      	skinvar=1;
+		skin.open("bkground.txt",ios::in);
+		if(!skin)
+		{
+		cout<<"\n\nunable to open bkground.txt";
+		c.error2(); //gives message to solve the error
+		getch();
+		exit(0);
+		}
+		skin.seekg(-1,ios::end);
+		skin.read((char*)&bkchar,sizeof(bkchar));   //reads last value in the file(bkground.txt)
+		bkcolor=atoi(bkchar);
+		skin.close();
+		skin.open("color.txt",ios::in);
+		if(!skin)
+		{
+		cout<<"\n\nunable to open color.txt";
+		c.error3(); //gives message to solve the error
+		getch();
+		exit(0);
+		}
+		skin.seekg(-1,ios::end);
+		skin.read((char*)&colorchar,sizeof(colorchar));//reads last value in the file(color.txt)
+		maincolor=atoi(colorchar);
+		skin.close();
+		c.showmouseptr();
+			outtextxy(200,200,"one mouse click required");
+			outtextxy(100,260,"click on the box with your mouse and then press return key ");
+			rectangle(200,300,230,330);
+			getch();
+			c.hidemouseptr();
+			cleardevice();
+			c.logo2();
+			setbkcolor(bkcolor);
+			s1.home_menu();
+	 }///////skin 1 if codition over///
+	else if(strcmp((char*)skn,(char*)skn1)!=0)
+      {
+	skinvar=2;
+	skin.open("color.txt",ios::in);
+		if(!skin)
+		{
+		cout<<"\n\nunable to open color.txt";
+		c.error3();//gives message to solve the error
+		getch();
+		exit(0);
+		}
+		skin.seekg(-1,ios::end);
+		skin.read((char*)&colorchar,sizeof(colorchar));//reads last value in the file(color.txt)
+		maincolor=atoi(colorchar);
+		skin.close();
+		setbkcolor(0);
+		c.showmouseptr();
+			outtextxy(200,200,"one mouse click required");
+			outtextxy(100,260,"click on the box with your mouse and then press return key ");
+			rectangle(200,300,230,330);
+			getch();
+			c.hidemouseptr();
+			cleardevice();
+			c.logo2();
+			s2.home_menu();
+
+
+
+      }  ///skin 2  if condition over
+
+    } //else if condition end
+	c.hidemouseptr();
+	closegraph();
+}          //////////////      end of main ()      /////////////////
+//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+/////////___________________________________________________________.......
+//definations of the functions of skin1 class........
+void skin1::circle_button_boundary(int circx,int circy,int circr)/*draws circle boundary*/
+{ setcolor(maincolor);
+  circle(circx,circy,circr);
+  circle(circx,circy,circr-1);
+
+}
+void skin1::circle_button_boundary2(int circ2x,int circ2y,int circ2r)/*draws circle boundary (thin)*/
+{ setcolor(maincolor);
+  circle(circ2x,circ2y,circ2r);
+}
+void skin1::home_menu()
+{ 	 cleardevice();
+	 c.hidemouseptr();
+	 cleardevice();
+	 s1.background(bkcolor);
+	 s1.circle_button_boundary(320,180,40);
+	 s1.circle_button_boundary(320,280,40);
+	 s1.circle_button_boundary(320,380,40);
+	 s1.circle_button_boundary(100,65,40);
+	 s1.circle_button_boundary(540,430,40);
+	 c.composer_icon(320,180);
+	 c.pattern_maker_icon(320,280);
+	 c.settings_button(100,50);
+	 c.exit_button(540,430);
+	 c.about_icon(320,380);
+	 c.main_text(40,250);
+	 c.showmouseptr();
+	 c.home_conditions();
+}
+void skin1::background(int bkcolor)  /*sets background*/
+{   setbkcolor(bkcolor);
+}
+void skin1::tittle_bar1() /*makes title bar in skin 1 for composer page*/
+{ c.small_logo(40,30);
+  c.main_text_small(70,0);
+  c.pattern_maker_small_icon(420,30);
+  s1.circle_button_boundary(420,30,20);
+  c.small_wrong_icon(600,30);
+  s1.circle_button_boundary(600,30,20);
+  c.back_icon(490,30);
+  s1.circle_button_boundary(487,30,20);
+  c.help_icon(540,30);
+  s1.circle_button_boundary(540,30,20);
+}
+void skin1::tittle_bar2() /*makes title bar in skin 1 for pattern maker page*/
+{ c.small_logo(40,30);
+  c.main_text_small(70,0);
+  c.small_wrong_icon(600,30);
+  s1.circle_button_boundary(600,30,20);
+  c.back_icon(490,30);
+  s1.circle_button_boundary(487,30,20);
+  c.help_icon(540,30);
+  s1.circle_button_boundary(540,30,20);
+  setcolor(maincolor);
+  c.composer_small_icon(420,30);
+  s1.circle_button_boundary(420,30,20);
+}
+void skin1::draw_composer_page() /*draws composer page for skin1 and calls its condition function*/
+{ cleardevice();
+  c.hidemouseptr();
+  s1.background(bkcolor);
+  s1.tittle_bar1();
+  c.tone1(50,100);
+  circle_button_boundary(50,100,15);
+  c.tone2(100,100);
+  circle_button_boundary(100,100,15);
+  c.tone3(150,100);
+  circle_button_boundary(150,100,15);
+  c.key_loop();
+  c.record_icon(400,100);
+  s1.circle_button_boundary(400,100,20);
+  c.stop_icon(450,100);
+  s1.circle_button_boundary(450,100,20);
+  c.open_icon(500,100);
+  s1.circle_button_boundary(500,100,20);
+  c.stop_icon2(320,465);
+  s1.circle_button_boundary(320,465,20);
+  c.showmouseptr();
+  delay(500);
+  c.composer_conditions();
+}
+void skin1::draw_pattern_maker_page() /* drws pattern maker page for skin 1 and calls its condition function*/
+{   cleardevice();
+    c.hidemouseptr();
+   ///////matrix loop///
+     setcolor(maincolor);
+   for(int ml=0;ml<=590;ml+=10)
+     line(50+ml,100,50+ml,330);
+   for(int ml2=0;ml2<=230;ml2+=10)
+     line(50,100+ml2,640,100+ml2);
+   /////////////////////
+      s1.tittle_bar2();
+      c.play_icon(62,80);
+      s1.circle_button_boundary2(60,80,10);
+      c.stop_icon(80,80);
+      s1.circle_button_boundary2(80,80,10);
+      c.pencil_icon(100,80);
+      s1.circle_button_boundary2(100,80,10);
+      c.eraser_icon(118,81);
+      s1.circle_button_boundary2(120,80,10);
+      c.save_icon(140,80);
+      s1.circle_button_boundary2(140,80,10);
+      c.open_icon(160,80);
+      s1.circle_button_boundary2(160,80,10);
+      c.new_icon(180,80);
+      s1.circle_button_boundary2(180,80,10);
+      c.tone1(250,80);
+      s1.circle_button_boundary2(250,80,10);
+      c.tone2(300,80);
+      s1.circle_button_boundary2(300,80,10);
+      c.triangle(55,95);
+      c.key_loop2();
+      setcolor(maincolor);
+      line(50,100,50,330);
+      c.showmouseptr();
+      delay(500);
+      if(op==0) /// op works as a flag
+      c.pattern_maker_conditions();
+}
+///end of definations of skin1 class....
+//////____________________________________________________________________________////
+/////////___________________________________________________________.......
+//definations of the functions of skin2 class........
+void skin2::rectangle_button_boundary(int recx1,int recy1,int recx2,int recy2)//draws rectangle boundary
+{  setcolor(maincolor);
+   rectangle(recx1,recy1,recx2,recy2);
+   rectangle(recx1+1,recy1+1,recx2-1,recy2-1);
+}
+void skin2::background()//sets background color
+{  setbkcolor(0);
+}
+void skin2::draw_composer_page()/*draws composer page for skin 2 and calls its condition function*/
+{ cleardevice();
+  c.hidemouseptr();
+  s2.background();
+  s2.tittle_bar1();
+  c.tone1(50,100);
+  s2.rectangle_button_boundary(50-15,100-15,50+15,100+15);
+  c.tone2(100,100);
+  s2.rectangle_button_boundary(100-15,100-15,100+15,100+15);
+  c.tone3(150,100);
+  s2.rectangle_button_boundary(150-15,100-15,150+15,100+15);
+  c.key_loop();
+  c.record_icon(400,100);
+  s2.rectangle_button_boundary(400-20,100-20,400+20,100+20);
+  c.stop_icon(450,100);
+  s2.rectangle_button_boundary(450-20,100-20,450+20,100+20);
+  c.open_icon(500,100);
+  s2.rectangle_button_boundary(500-20,100-20,500+20,100+20);
+  c.stop_icon2(320,465);
+  s2.rectangle_button_boundary(320-20,465-20,320+20,465+20);
+  c.showmouseptr();
+  delay(500);
+  c.composer_conditions();
+}
+void skin2::draw_pattern_maker_page()/* draws pattewrn maker page for skin 2 and calls its condition function*/
+{  cleardevice();
+   c.hidemouseptr();
+  ///////matrix loop///
+     setcolor(maincolor);
+   for(int ml=0;ml<=590;ml+=10)
+    line(50+ml,100,50+ml,330);
+   for(int ml2=0;ml2<=230;ml2+=10)
+    line(50,100+ml2,640,100+ml2);
+     /////////////////////
+      s2.tittle_bar2();
+      c.play_icon(62,80);
+      s2.rectangle_button_boundary(60-10,80-10,60+10,80+10);
+      c.stop_icon(80,80);
+      s2.rectangle_button_boundary(80-10,80-10,80+10,80+10);
+      c.pencil_icon(100,80);
+      s2.rectangle_button_boundary(100-10,80-10,100+10,80+10);
+      c.eraser_icon(118,81);
+      s2.rectangle_button_boundary(120-10,80-10,120+10,80+10);
+      c.save_icon(140,80);
+      s2.rectangle_button_boundary(140-10,80-10,140+10,80+10);
+      c.open_icon(160,80);
+      s2.rectangle_button_boundary(160-10,80-10,160+10,80+10);
+      c.new_icon(180,80);
+      s2.rectangle_button_boundary(180-10,80-10,180+10,80+10);
+      c.tone1(250,80);
+      s2.rectangle_button_boundary(250-10,80-10,250+10,80+10);
+      c.tone2(300,80);
+      s2.rectangle_button_boundary(300-10,80-10,300+10,80+10);
+      c.triangle(55,95);
+      c.key_loop2();
+      setcolor(maincolor);
+      line(50,100,50,330);
+      c.showmouseptr();
+      delay(500);
+      if(op==0) // op orks as a flag
+      c.pattern_maker_conditions();
+}
+void skin2::tittle_bar1()/*draws tittle bar in skin2 for composer page*/
+{ c.small_logo(40,30);
+  c.main_text_small(70,0);
+  c.pattern_maker_small_icon(420,30);
+  s2.rectangle_button_boundary(420-20,30-20,420+20,30+20);
+  c.small_wrong_icon(600,30);
+  s2.rectangle_button_boundary(600-20,30-20,600+20,30+20);
+  c.back_icon(490,30);
+  s2.rectangle_button_boundary(487-20,30-20,487+20,30+20);
+  c.help_icon(540,30);
+  s2.rectangle_button_boundary(540-20,30-20,540+20,30+20);
+}
+
+void skin2::tittle_bar2() /*draws tittle bar in skin2 for pattern maker page*/
+{ c.small_logo(40,30);
+  c.main_text_small(70,0);
+  c.small_wrong_icon(600,30);
+  s2.rectangle_button_boundary(600-20,30-20,600+20,30+20);
+  c.back_icon(490,30);
+  s2.rectangle_button_boundary(487-20,30-20,487+20,30+20);
+  c.help_icon(540,30);
+  s2.rectangle_button_boundary(540-20,30-20,540+20,30+20);
+  setcolor(maincolor);
+  c.composer_small_icon(420,30);
+  s2.rectangle_button_boundary(420-20,30-20,420+20,20+30);
+}
+void skin2::home_menu()/* home menu in skin2*/
+{ 	 cleardevice();
+	 c.hidemouseptr();
+	 cleardevice();
+	 s2.background();
+	 s2.rectangle_button_boundary(320-40,180-40,320+40,180+40);
+	 s2.rectangle_button_boundary(320-40,280-40,320+40,280+40);
+	 s2.rectangle_button_boundary(320-40,380-40,320+40,380+40);
+	 s2.rectangle_button_boundary(100-40,65-40,100+40,65+40);
+	 s2.rectangle_button_boundary(540-40,430-40,540+40,430+40);
+	 c.composer_icon(320,180);
+	 c.pattern_maker_icon(320,280);
+	 c.settings_button(100,50);
+	 c.exit_button(540,430);
+	 c.about_icon(320,380);
+	 c.main_text(40,250);
+	 c.showmouseptr();
+	 c.home_conditions();
+}
+///end of definations of skin2 class....
+//////____________________________________________________________________________////
+////definations of common class///////
+/////__________________________________________________________________________
+void common::home_conditions()
+{      button=0;
+	 while(ch!='z')
+	{ c.showmouseptr();
+	 c.getmousepos (&button, &x, &y);
+	 if((button &1)==1)
+	 {   c.hidemouseptr();
+	    if(x>=320-40&&y<=180+40&&x<=320+40&&y>=180-40)  //for composer
+	    { c.fill_button(350,180);
+	      delay(100);
+	      if(skinvar==1)
+	      s1.draw_composer_page();
+	      if (skinvar==2)
+	      s2.draw_composer_page();
+	     }
+	    if(x>=320-40&&y<=280+40&&x<=320+40&&y>=280-40)  //for pattern maker
+	    { c.fill_button(350,280);
+	      delay(100);
+	      if(skinvar==1)
+	      s1.draw_pattern_maker_page();
+	      if(skinvar==2)
+	      s2.draw_pattern_maker_page();
+	    }
+	    if(x>=320-40&&y<=380+40&&x<=320+40&&y>=380-40)  //for about
+	    { c.fill_button(350,380);
+	      delay(100);
+	      c.about();
+	    }
+	    if(x>=100-40&&y<=65+40&&x<=100+40&&y>=65-40)    //for settings
+	    { c.fill_button(130,65);
+	      delay(100);
+	      c.settings();
+	    }
+	    if(x>=540-40&&y<=430+40&&x<=540+40&&y>=430-40)  //for exit
+	    { c.fill_button(570,430);
+	      delay(100);
+	      goto end;
+	    }
+	    c.showmouseptr();
+	  }
+	}///end of while
+	end:
+      c.doexit();
+}
+void common::main_text(int txtx,int txty) /*draws name of app*/
+{  setcolor(maincolor);
+   rectangle(txtx-10,txty+10,txtx+195,txty+160);
+   settextstyle(0,0,4);
+   outtextxy(txtx,txty+15,"C++");
+   settextstyle(0,0,4);
+   outtextxy(txtx,txty+85,"MUSIC");
+   settextstyle(0,0,3);
+   outtextxy(txtx,txty+130,"COMPOSER");
+}
+void common::sound_line1(int spkc)/*sound lines coming from speaker*/
+{    setcolor(spkc)    ;
+    //for first speaker.IST.......
+     line(40,20,65,60);
+     line(20,90,50,120);
+     line(5,160,48,180);
+     line(0,220,50,235);
+     line(120,10,120,50);
+     line(200,20,170,60);
+     line(220,90,180,120);
+     line(220,160,180,180);
+     line(220,220,180,238);
+    //for second speaker.IST.......
+     line(430,50,460,90);
+     line(420,120,450,150);
+     line(425,190,448,200);
+     line(420,240,450,255);
+     line(500,10,500,50);
+     line(570,20,555,50);
+     line(620,60,580,100);
+     line(620,140,580,160);
+     line(620,200,580,218);
+}
+void common::sound_line2(int spkc)/*sound lines of another directions coming from speaker*/
+{    setcolor(spkc);
+     //for first speaker.IIND.......
+	 line(30,50,60,90);
+	 line(20,120,50,150);
+	 line(5,180,48,200);
+	 line(0,240,50,255);
+	 line(100,10,100,50);
+	 line(170,20,155,50);
+	 line(220,60,180,100);
+	 line(220,140,180,160);
+	 line(220,200,180,218);
+	 //for second speaker.IIND......
+	 line(440,20,465,60);
+	 line(420,90,450,120);
+	 line(415,160,448,180);
+	 line(420,220,450,235);
+	 line(520,10,520,50);
+	 line(600,20,570,60);
+	 line(620,90,580,120);
+	 line(620,160,580,180);
+	 line(620,220,580,238);
+}
+void common::gole1(int golx,int goly)/*circles of speakers*/
+{  setcolor(15);
+   arc(75+40,75+50,0,360,golx);
+   arc(75+40,75+150,0,360,goly);
+   arc(475+40,75+50,0,360,golx);
+   arc(475+40,75+150,0,360,goly);
+}
+void common::gole2(int golx,int goly)/*big circles of speakers*/
+{  setcolor(0);
+   arc(75+40,75+50,0,360,golx);
+   arc(75+40,75+150,0,360,goly);
+   arc(475+40,75+50,0,360,golx);
+   arc(475+40,75+150,0,360,goly);
+}
+void common::draw_speakers(int spk_x,int spk_y)/*draws speakers*/
+{  line(spk_x,spk_y,spk_x+80,spk_y);
+   line(spk_x,spk_y,spk_x-10,spk_y+200);
+   line(spk_x+80,spk_y,spk_x+85,spk_y+200);
+   line(spk_x-10,spk_y+200,spk_x+85,spk_y+200);
+   arc(spk_x+40,spk_y+50,0,360,30);
+   arc(spk_x+40,spk_y+150,0,360,35);
+   arc(spk_x+40,spk_y+50,0,360,15);
+   arc(spk_x+40,spk_y+150,0,360,17);
+}
+void common::draw_ellipse(int ad)/* draws dj's disc*/
+{   setcolor(ad);
+    ellipse(215,330,0,360,42,16);
+    ellipse(215,330,0,360,10,4);
+    ellipse(385,330,0,360,42,16);
+    ellipse(385,330,0,360,10,4);
+    ellipse(215,330,65-15,307+180,21,8);
+    ellipse(215,330,65-15,307+180,33,13);
+    ellipse(215,330,65-15,307+180,27,11);
+    ellipse(215,330,65-15,307+180,15,6);
+    ellipse(215,330,235,307,21,8);
+    ellipse(215,330,235,307,33,13);
+    ellipse(215,330,235,307,27,11);
+    ellipse(215,330,235,307,15,6);
+    ellipse(385,330,65-15,307+180,21,8);
+    ellipse(385,330,65-15,307+180,33,13);
+    ellipse(385,330,65-15,307+180,27,11);
+    ellipse(385,330,65-15,307+180,15,6);
+    ellipse(385,330,235,307,21,8);
+    ellipse(385,330,235,307,33,13);
+    ellipse(385,330,235,307,27,11);
+    ellipse(385,330,235,307,15,6);
+}
+void common::draw_ellipse1(int ac)/* draws dj's disc in another way*/
+{   setcolor(ac);
+    ellipse(215,330,0,360,42,16);
+    ellipse(215,330,0,360,10,4);
+    ellipse(385,330,0,360,42,16);
+    ellipse(385,330,0,360,10,4);
+    ellipse(215,330,-60,-307,21,8);
+    ellipse(215,330,-60,-307,33,13);
+    ellipse(215,330,-58,-305,27,11);
+    ellipse(215,330,-60,-307,15,6);
+    ellipse(215,330,-235,-120,21,8);
+    ellipse(215,330,-235,-120,33,13);
+    ellipse(215,330,-235,-120,27,11);
+    ellipse(215,330,-235,-120,15,6);
+    ellipse(385,330,-60,-307,21,8);
+    ellipse(385,330,-60,-307,33,13);
+    ellipse(385,330,-58,-305,27,11);
+    ellipse(385,330,-60,-307,15,6);
+    ellipse(385,330,-235,-120,21,8);
+    ellipse(385,330,-235,-120,33,13);
+    ellipse(385,330,-235,-120,27,11);
+    ellipse(385,330,-235,-120,15,6);
+}
+void common::taar()/*draws wire*/
+{ 	setcolor(15);
+	ellipse(220,411,0,60,48,40);
+	ellipse(227,404,300,350,42,40);
+	line(248,439,235,444);
+	line(224,450,235,444);
+	line(224,450,218,456);
+	line(216,464,218,456);
+	ellipse(245,377,0,360,2,2);
+}
+void common::rec(int x,int y)/*draws dials of dj*/
+{  setcolor(15);
+   line(0+x,3+y,5+x,3+y);
+   line(0+x,3+y,0+x,8+y);
+   line(5+x,8+y,0+x,8+y);
+   line(5+x,3+y,5+x,8+y);
+}
+void common::small_logo(int slogox,int slogoy)/*draws small logo*/
+{  setcolor(maincolor);
+   setfillstyle(1,1);
+   fillellipse(slogox,slogoy,10,10);
+   setcolor(maincolor);
+   setfillstyle(1,14);
+   pieslice(slogox-12,slogoy,90,270,4);
+   pieslice(slogox+12,slogoy,90,0,4);
+   pieslice(slogox+12,slogoy,270,270+90,4);
+   setcolor(maincolor);
+   arc(slogox,slogoy,0,180,14);
+}
+void common::main_text_small(int stxtx,int stxty) /*give small name of app*/
+{  setcolor(maincolor);
+   settextstyle(0,0,2);
+   outtextxy(stxtx,stxty+15+15,"C++");
+   settextstyle(0,0,2);
+   outtextxy(stxtx+60,stxty+15+15,"MUSIC");
+   outtextxy(stxtx+120+30,stxty+15+15,"COMPOSER");
+}
+void common::eraser_icon(int ersx,int ersy)
+{ setcolor(maincolor);
+  setfillstyle(1,maincolor);
+  bar3d(ersx-5,ersy-3,ersx+5,ersy+3,4,1);
+}
+void common::save_icon(int svx,int svy)
+{  setcolor(maincolor);
+   rectangle(svx-5,svy-5,svx+5,svy+5);
+   setfillstyle(1,maincolor);
+   bar(svx-3,svy-5,svx+3,svy);
+}
+void common::new_icon(int nwx,int nwy)
+{  setcolor(maincolor);
+   line(nwx-5,nwy-5,nwx-5,nwy+5);
+   line(nwx-5,nwy+5,nwx+5,nwy+5);
+   line(nwx+5,nwy+5,nwx+5,nwy-2);
+   line(nwx-5,nwy-5,nwx+2,nwy-5);
+   line(nwx+2,nwy-5,nwx+2,nwy-2);
+   line(nwx+2,nwy-2,nwx+5,nwy-2);
+   line(nwx+2,nwy-5,nwx+5,nwy-2);
+}
+void common::help_icon(int hlpx,int hlpy)
+{  setcolor(maincolor);
+   arc(hlpx,hlpy,270,180,5);
+   line(hlpx,hlpy+5,hlpx,hlpy+7);
+   putpixel(hlpx,hlpy+10,maincolor) ;
+}
+void common::pencil_icon(int pnclx,int pncly)
+{  setcolor(maincolor);
+   line(pnclx+2,pncly-6,pnclx-4,pncly+6);
+   line(pnclx+4,pncly-5,pnclx-2,pncly+5);
+   line(pnclx-2,pncly+5,pnclx-4,pncly+6);
+   line(pnclx+2,pncly-6,pnclx+4,pncly-5);
+}
+void common::triangle(int tx,int ty)/*makes small triangle*/
+{  setcolor(maincolor);
+   poly[0]=tx-2;
+   poly[1]=ty-2;
+   poly[2]=tx+2;
+   poly[3]=ty-2;
+   poly[4]=tx;
+   poly[5]=ty+2;
+   poly[6]=poly[0];
+   poly[7]=poly[1];
+   setfillstyle(1,maincolor);
+   fillpoly(3,poly);
+   setcolor(0);
+   line(poly[0]-1,poly[1],poly[4]-1,poly[5]);
+}
+void common::tone1(int t1x,int t1y) /*icon for tone 1*/
+{setcolor(maincolor);
+ line(t1x-2,t1y,t1x+2,t1y);
+}
+void common::tone2(int t2x,int t2y) /*icon for tone 2*/
+{ setcolor(maincolor);
+  line(t2x-4,t2y,t2x+4,t2y);
+}
+void common::tone3(int t3x,int t3y)/*icon for tone 3*/
+{ setcolor(maincolor);
+  line(t3x-1,t3y,t3x+1,t3y);
+  line(t3x-5,t3y,t3x-3,t3y);
+  line(t3x+3,t3y,t3x+5,t3y);
+}
+void common::composer_icon(int compx,int compy)/*draws icon of composer*/
+{ setfillstyle(1,maincolor);
+  bar(compx-20,compy-20,compx+20,compy+20);
+  setcolor(0);
+  line(compx-10,compy-20,compx-10,compy+20);
+  line(compx+10,compy-20,compx+10,compy+20);
+  setfillstyle(1,0);
+  bar(compx-15,compy-20,compx-5,compy);
+  bar(compx+5,compy-20,compx+15,compy);
+}
+void common::composer_small_icon(int compsx,int compsy)/*draws small icon of composer*/
+{ setcolor(maincolor);
+  setfillstyle(1,maincolor);
+  bar(compsx-10,compsy-10,compsx+10,compsy+10);
+  setcolor(0);
+  line(compsx-5,compsy-10,compsx-5,compsy+10);
+  line(compsx+5,compsy-10,compsx+5,compsy+10);
+  setfillstyle(1,0);
+  bar(compsx-7,compsy-10,compsx-3,compsy);
+  bar(compsx+3,compsy-10,compsx+7,compsy);
+}
+void common::pattern_maker_icon(int pmx,int pmy)/*draws patt makr icon*/
+{ setcolor(maincolor);
+  rectangle(pmx-20,pmy-20,pmx+20,pmy+20);
+  rectangle(pmx-19,pmy-19,pmx+19,pmy+19);
+  line(pmx-7,pmy-20,pmx-7,pmy+20);
+  line(pmx+8,pmy-20,pmx+8,pmy+20);
+  line(pmx-20,pmy-7,pmx+20,pmy-7);
+  line(pmx-20,pmy+8,pmx+20,pmy+8);
+  setfillstyle(1,maincolor);
+  floodfill(pmx-18,pmy+9,maincolor);
+  floodfill(pmx+18,pmy-18,maincolor);
+}
+void common::pattern_maker_small_icon(int pmsx,int pmsy)/*draws patt makr icon*/
+{ setcolor(maincolor);
+  rectangle(pmsx-10,pmsy-10,pmsx+10,pmsy+10);
+  rectangle(pmsx-9,pmsy-9,pmsx+9,pmsy+9);
+  line(pmsx-4,pmsy-10,pmsx-4,pmsy+10);
+  line(pmsx+4,pmsy-10,pmsx+4,pmsy+10);
+  line(pmsx-10,pmsy-4,pmsx+10,pmsy-4);
+  line(pmsx-10,pmsy+4,pmsx+10,pmsy+4);
+  setfillstyle(1,maincolor);
+  floodfill(pmsx-7,pmsy+5,maincolor);
+  floodfill(pmsx+7,pmsy-5,maincolor);
+}
+void common::play_icon(int playx,int playy)/*draws play icon*/
+{ setcolor(maincolor);
+  line(playx-5,playy-5,playx-5,playy+5);
+  line(playx-5,playy-5,playx+2,playy);
+  line(playx-5,playy+5,playx+2,playy);
+  setfillstyle(1,maincolor);
+  floodfill(playx,playy,maincolor);
+}
+void common::stop_icon(int stopx,int stopy)/*draws stop icon*/
+{ setcolor(maincolor);
+  setfillstyle(1,maincolor);
+  bar(stopx-5,stopy-5,stopx+5,stopy+5);
+}
+void common::stop_icon2(int stop2x,int stop2y)/*draws wide stop icon*/
+{ setcolor(maincolor);
+  setfillstyle(1,maincolor);
+  bar(stop2x-10,stop2y-5,stop2x+10,stop2y+5);
+}
+void common::small_wrong_icon(int wrngx,int wrngy)/*draws X  small icon*/
+{  setcolor(maincolor);
+   line(wrngx-5,wrngy-5,wrngx+5,wrngy+5);
+   line(wrngx+5,wrngy-5,wrngx-5,wrngy+5);
+}
+void common::fill_button(int fillx,int filly)/*fill the button*/
+{ setfillstyle(1,8);
+  floodfill(fillx,filly,maincolor) ;
+}
+void common::open_icon(int opx,int opy)/*draws open  icon*/
+{  setcolor(maincolor);
+   line(opx-5,opy-2,opx-2,opy+5);
+   line(opx-2,opy+5,opx+6,opy+5);
+   line(opx+6,opy+5,opx+2,opy-2);
+   line(opx+2,opy-2,opx-5,opy-2);
+   line(opx+6,opy+5,opx+6,opy-4);
+   line(opx+6,opy-4,opx-5,opy-2);
+}
+void common::color_icon(int colx,int coly)/*draws color icon in settings icon*/
+{ setcolor(maincolor);
+  circle(colx,coly,20);
+  circle(colx,coly,18);
+}
+void common::settings_button(int setx,int sety)/*draws settings icon icon*/
+{ setcolor(maincolor);
+  for(int sev=0;sev<=5;++sev)
+  ellipse(setx,sety,150,30,10-sev,13-sev);
+  setfillstyle(1,maincolor);
+  bar(setx-3,sety+10,setx+3,sety+35);
+}
+void common::exit_button(int exitx,int exity)/*draws exit icon*/
+{ setcolor(maincolor);
+  rectangle(exitx-15,exity-20,exitx+15,exity+20);
+  rectangle(exitx-14,exity-19,exitx+14,exity+19);
+  rectangle(exitx-13,exity-18,exitx+13,exity+18);
+  setfillstyle(1,maincolor);
+  fillellipse(exitx-5,exity+1,2,2);
+}
+void common::right_icon(int rx,int ry)/*draws true icon*/
+{ setcolor(maincolor);
+  line(rx+20,ry-20,rx-20,ry+20);
+  line(rx+18,ry-20,rx-22,ry+20);
+  line(rx-20,ry+20,rx-23,ry);
+  line(rx-22,ry+20,rx-25,ry);
+}
+void common::wrong_icon(int wx,int wy)/*draws X icon*/
+{ setcolor(maincolor);
+  line(wx-20,wy-20,wx+20,wy+20);
+  line(wx+20,wy-20,wx-20,wy+20);
+  line(wx-19,wy-20,wx+19,wy+20);
+  line(wx+19,wy-20,wx-19,wy+20);
+}
+/*void common::nxt_page_icon(int nxtx,int nxty)
+{
+    line(nxtx-5,nxty,nxtx-10,nxty-5);
+    line(nxtx-5,nxty,nxtx-10,nxty+5);
+    line(nxtx+5,nxty,nxtx-10,nxty-5);
+    line(nxtx+5,nxty,nxtx-10,nxty+5);
+} */
+void common::back_icon(int bkx,int bky)/*draws <- icon*/
+{  setcolor(maincolor);
+   line(bkx-15,bky,bkx+6,bky)     ;
+   line(bkx-15,bky+1,bkx+6,bky+1);
+   line(bkx-7,bky-7,bkx-15,bky);
+   line(bkx-6,bky-7,bkx-14,bky);
+   line(bkx-7,bky+7,bkx-15,bky);
+   line(bkx-6,bky+7,bkx-15,bky);
+}
+void common::about_icon(int abtx,int abty)/*draws about icon*/
+{  setcolor(maincolor);
+   line(abtx-15,abty-20,abtx-15,abty+20);
+   line(abtx+15,abty-15,abtx+15,abty+20);
+   line(abtx-15,abty+20,abtx+15,abty+20);
+   line(abtx-15,abty-20,abtx+5,abty-20);
+   line(abtx+5,abty-20,abtx+5,abty-15);
+   line(abtx+5,abty-15,abtx+15,abty-15);
+   line(abtx+5,abty-20,abtx+15,abty-15);
+   line(abtx-14,abty-19,abtx-14,abty+19);
+   line(abtx+14,abty-14,abtx+14,abty+19);
+   line(abtx-14,abty+19,abtx+14,abty+19);
+   line(abtx-14,abty-19,abtx+4,abty-19);
+   line(abtx+4,abty-19,abtx+4,abty-14);
+   line(abtx+4,abty-14,abtx+14,abty-14);
+   line(abtx+4,abty-19,abtx+14,abty-14);
+   line(abtx-10,abty-12,abtx+10,abty-12);
+   line(abtx-10,abty-7,abtx+10,abty-7);
+   line(abtx-10,abty-2,abtx+10,abty-2);
+}
+void common::bkground_icon(int bkx,int bky)/*draws bkground icon in settings icon*/
+{  setcolor(maincolor);
+   rectangle(bkx-20,bky-20,bkx+20,bky+20);
+   rectangle(bkx-18,bky-18,bkx+18,bky+18);
+}
+void common::skin_icon(int sknx,int skny)/*draws skin icon in settings icon*/
+{  setcolor(maincolor);
+   circle(sknx,skny,20);
+   circle(sknx,skny,18);
+   setcolor(0);
+   setfillstyle(1,0);
+   bar(sknx-5,skny-25,sknx+5,skny-15);
+   bar(sknx-25,skny+5,sknx-15,skny+15);
+   bar(sknx+25,skny+5,sknx+15,skny+15);
+}
+void common::error()/*gives message to solve error*/
+{ cout<<"\n\n\nto prevent this error do the following steps";
+  cout<<"\n\n\n\r\tstep 1: open NOTEPAD and write `a'";
+  cout<<"\n\n\tstep 2: save the file as `skin.txt'";
+  cout<<"\n\n\tstep 3: put this file in your `BIN' folder";
+  cout<<"\n\n\tstep 4: now run  the program and enjoy";
+}
+void common::error2()/*gives message to solve error*/
+{ cout<<"\n\n\nto prevent this error do the following steps";
+  cout<<"\n\n\n\r\tstep 1: open NOTEPAD and write `0'";
+  cout<<"\n\n\tstep 2: save the file as `bkground.txt'";
+  cout<<"\n\n\tstep 3: put this file in your `BIN' folder";
+  cout<<"\n\n\tstep 4: now run  the program and enjoy";
+}
+void common::error3()/*gives message to solve error*/
+{ cout<<"\n\n\nto prevent this error do the following steps";
+  cout<<"\n\n\n\r\tstep 1: open NOTEPAD and write `7'";
+  cout<<"\n\n\tstep 2: save the file as `color.txt'";
+  cout<<"\n\n\tstep 3: put this file in your `BIN' folder";
+  cout<<"\n\n\tstep 4: now run  the program and enjoy";
+  cout<<"\n\n\n\t\anote: its `color.txt'not `colour.txt'";
+}
+void common::logo2()/*makes logo */
+{  c.draw_speakers(75,75);
+   c.draw_speakers(475,75);
+   setcolor(1);
+   ellipse(300,247,115,426,60-5,60-8);
+   setcolor(1);
+   line(269,190,300,224);
+   line(330,190,300,224);
+   line(269,190,286,193);
+   line(329,190,314,193);
+   line(286,193,300,170);
+   line(314,193,300,170);
+   setfillstyle(1,1);
+   floodfill(300,260,1);
+   /////////////////////////eye 1/////////////////////////////////
+   setcolor(15);
+   line(265-3,240,270-3,230);
+   line(265-3,240,285-3,245);
+   line(285-3,245,270-3,230);
+   line(285-5,245,270-5,233);
+   /////////////////////////eye /////////////////////////////////
+   setcolor(15);
+   line(265+72,240,270+63,230);
+   line(265+72,240,285+32,245);
+   line(270+63,230,285+32,245);
+   line(270+64,234,285+34,245);
+///////////////////////////////tooth/////////////////////////////
+   setcolor(0);
+   arc(300,446,85,95,180);
+   arc(300,198,257,283,90);
+   ////////////////////////////teeth////////////////////////////
+   setcolor(0);
+   line(284,268,280,286);
+   line(284+31,268,280+40,286);
+   arc(300,186,259,281,90);
+   line(284+8,268,280+9,286);
+   line(284+15,268,280+19,286);
+   line(284+22,268,280+30,286);
+ ///////////////////////////// ear  //////////////////////////////////
+   setcolor(15);
+   arc(300,242,18,80,60);                   //upper half
+   arc(300,242,99,163,60);                  ///lower half
+   arc(300,240,18,81,60);
+   arc(300,240,97,162,60);
+ ////////////////////// headphone 1 /////////////////////////////////////
+   int x1=171,y1=163;
+   setcolor(15);
+   ellipse(80+x1,80+y1,110-10,250+8,26,20+2);
+   ellipse(230+x1,80+y1,110+62,250-63,160,160);
+   ellipse(234+x1,80+y1,110+62,250-63,160,160);
+   setfillstyle(1,15);
+floodfill(242,235,15);
+//////////////////////// headphone 2/////////////////////////////////
+   int a=269,b=163;
+   setcolor(15);
+   ellipse(80+a,80+b,282,78,25,22);
+   ellipse(80-154+a,80+b,353,7,160,160);
+   ellipse(80-150+a,80+b,353,7,160,160);
+   putpixel(354,265,0);
+   setfillstyle(1,15);
+   floodfill(358,235,15);
+  setfillstyle(1,14);
+  floodfill(360,244,15);
+  setfillstyle(1,14);
+  floodfill(232,244,15);
+  setfillstyle(1,15);
+  floodfill(303,270,0);
+  setfillstyle(1,15);
+  floodfill(303,280,0);
+  floodfill(288,280,0);
+  floodfill(311,280,0);
+  setfillstyle(1,0);
+  floodfill(331,240,15);
+  floodfill(270,240,15);
+  setfillstyle(1,15);
+  floodfill(270,235,15);
+  floodfill(331,235,15);
+  setfillstyle(1,14);
+  floodfill(370,235,15);
+  setfillstyle(1,12);
+  floodfill(300,200,1);
+  setcolor(15);
+  settextstyle(0,0,2);
+  outtextxy(158,360,"C++ MUSIC COMPOSER");
+   setcolor(15);
+   int p=70,q=50,r=70,s=50;
+   int m=25;//n=25;
+   line(210-m,305,390+m,305);
+   line(210-p,305+q,390+r,305+s);
+   line(210-m,305,210-p,305+q);
+   line(390+m,305,390+r,305+s);
+   line(210-p,330+q,390+r,330+s);
+   line(210-p,305+q,210-p,330+q);
+   line(390+r,305+s,390+r,330+s);
+  setcolor(15);
+   setfillstyle(1,15);
+   fillellipse(200,377,8,0);
+   fillellipse(216,377,6,0);
+   fillellipse(229,377,4,0);
+   line(275,315,270,345);
+   line(292,315,293,345);
+   line(309,315,313,345);
+   line(326,315,333,345);
+   setcolor(0);
+   ellipse(80-154+a,80+b,353,7,160,160);
+   ellipse(80-150+a,80+b,353,7,160,160);
+   ellipse(230+x1,80+y1,110+62,250-63,160,160);
+   ellipse(234+x1,80+y1,110+62,250-63,160,160);
+   /////////////////////////taar//////////////////////
+c.taar();
+int abc=-3,abd=-3;
+c.rec(272+abc,335+abd);
+c.rec(328+abc,318+abd);
+c.rec(293+abc,326+abd);
+c.rec(312+abc,336+abd);
+     while(!kbhit())
+       { c.draw_ellipse(15);
+	  c.gole1(15,17);
+	 c.sound_line1(15);
+	 delay(200);
+	 c.draw_ellipse(0);
+	 c. draw_ellipse1(15);
+	 c.gole2(15,17);
+	 c.sound_line1(0);
+	 c.sound_line2(15);
+	 c.gole1(20,22);
+	 delay(200);
+	 c.draw_ellipse1(0);
+	 c.sound_line2(0);
+	 c.gole2(20,22);
+      }
+}
+int common::initmouse()/*initialises mouse*/
+{ 	i.x.ax=0;
+	int86 (0x33,&i,&o);
+	return (o.x.ax);
+}
+void common::showmouseptr()/*shows pointer*/
+{ 	i.x.ax=1;
+	int86(0x33,&i,&o);
+}
+void common::hidemouseptr()/*hides mouse pointer*/
+{  	i.x.ax=2;
+	int86(0x33,&i,&o);
+}
+void common::restrictmouseptr (int x1, int y1,int x2,int y2)/*restricts area for mouse pointer*/
+{ 	i.x.ax=7;
+	i.x.cx=x1;
+	i.x.dx=x2;
+	int86 (0x33,&i,&o);
+	i.x.ax=8;
+	i.x.cx=y1;
+	i.x.dx=y2;
+	int86 (0x33,&i,&o);
+}
+void common::getmousepos (int *button, int *x, int *y)/* takes mouse position*/
+{  	i.x.ax=3;
+	int86(0x33,&i,&o);
+	*button=o.x.bx;
+	*x=o.x.cx;
+	*y=o.x.dx;
+}
+void common::record_icon(int recx,int recy)/*draws record icon*/
+{ setcolor(maincolor);
+ setfillstyle(1,4);
+ fillellipse(recx,recy,5,5);
+}
+void common::composer_help()/*makes help page*/
+{ settextstyle(0,0,2);
+  outtextxy(20,80,"Composer Help:");
+  c.key_loop();
+  setcolor(maincolor);
+  outtextxy(160,280,"W");
+  outtextxy(195,280,"E");
+  outtextxy(265,280,"T");
+  outtextxy(300,280,"Y");
+  outtextxy(335,280,"U");
+  outtextxy(405,280,"O");
+  outtextxy(440,280,"P");
+  outtextxy(510,280,"]");
+  outtextxy(145,340,"A");
+  outtextxy(185,340,"S");
+  outtextxy(215,340,"D");
+  outtextxy(250,340,"F");
+  outtextxy(285,340,"G");
+  outtextxy(315,340,"H");
+  outtextxy(350,340,"J");
+  outtextxy(385,340,"K");
+  outtextxy(415+10,340,"L");
+  outtextxy(450+10,340,";");
+  outtextxy(485+10,340,"'");
+  settextstyle(0,0,1);
+  outtextxy(515+10,340,"Ent");
+}
+void common::patt_help()/*makes help page*/
+{  setcolor(maincolor);
+   settextstyle(0,0,2);
+   outtextxy(20,80,"Pattern Maker Help:");
+   outtextxy(20,110,"-fill those boxes which are in front");
+   outtextxy(40,140,"of your expected key");
+   outtextxy(20,170,"-fill the boxes using mouse(left)" );
+   outtextxy(20,200,"-U will see that your song has a pattern");
+   outtextxy(20,230,"-press Space to play and stop" );
+   outtextxy(20,260,"-TIP:press mouse (write) for eraser");
+}
+void common::help(int hvar)/*conditions for help page*/
+{ cleardevice();
+  c.hidemouseptr();
+  cleardevice();
+  c.showmouseptr();
+  if(skinvar==1)
+  { c.back_icon(30,30);
+   s1.circle_button_boundary(27,30,16);
+    c.showmouseptr();
+   if(hvar==1)
+       c.composer_help();
+   if(hvar==2)
+       c.patt_help();
+
+  }
+  if(skinvar==2)
+  {
+   c.back_icon(30,30);
+   s2.rectangle_button_boundary(27-16,30-16,27+16,30+16);
+   c.showmouseptr();
+   if(hvar==1)
+    c.composer_help();
+   if(hvar==2)
+    c.patt_help();
+  }
+   button=0;
+   ext=1;
+   showmouseptr();
+   while(ext!=0)
+   {   c.getmousepos(&button, &x, &y);
+       if((button &1)==1)
+	{ c.hidemouseptr();
+	  if(x>27-16&&x<27+16&&y>30-16&&y<30+16)
+	  {  c.fill_button(30,28);
+	     delay(100);
+	     ext=0;
+	     cleardevice();
+	     c.showmouseptr();
+	     if(hvar==1)
+	     {
+	       if(skinvar==1)
+	       s1.draw_composer_page();
+	       if(skinvar==2)
+	       s2.draw_composer_page();
+
+	     }
+	     if(hvar==2)
+	     {
+	      if(skinvar==1)
+	      s1.draw_pattern_maker_page();
+	      if(skinvar==2)
+	      s2.draw_pattern_maker_page();
+	     }
+
+	     }
+	  }
+	 c.showmouseptr();
+	}
+}
+void common::about_page(int abty)/*messages for about page*/
+{  settextstyle(0,0,2);
+   outtextxy(120,abty-70," C++ MUSIC COMPOSER");
+   outtextxy(170,abty-40,"Version:- 3.1");
+   outtextxy(120,abty," MADE BY:-GAURAV JHA");
+   outtextxy(120,abty+25,"             &         ");
+   outtextxy(120,abty+50,"        AMAR KUMAR");
+   outtextxy(100,abty+80," GUIDED BY:-SAMEER SIR ");
+}
+void common::about()  /*conditions for about page*/
+{    cleardevice();
+      setcolor(maincolor);
+     if(skinvar==1)
+  {
+   c.back_icon(30,30);
+   s1.circle_button_boundary(27,30,16);
+   c.showmouseptr();
+   }
+  if(skinvar==2)
+  {  c.back_icon(30,30);
+   s2.rectangle_button_boundary(27-16,30-16,27+16,30+16);
+      c.showmouseptr();
+   }
+   button=0;
+   ext=1;
+   int credy=490;
+   while(ext!=0)
+   {    setcolor(maincolor);
+	c.about_page(credy);
+	if(credy==-150)
+	   credy=490;
+	if(credy<=150||credy>=250)
+	 delay(1);
+	else
+	 delay(50);
+	 setcolor(0);
+	 c.about_page(credy);
+       c.getmousepos(&button, &x, &y);
+       if((button &1)==1)
+	{ c.hidemouseptr();
+	  if(x>27-16&&x<27+16&&y>30-16&&y<30+16)
+	  {  c.fill_button(30,28);
+	     delay(100);
+	     ext=0;
+	     cleardevice();
+	     c.showmouseptr();
+	     if(skinvar==1)
+	     s1.home_menu();
+	     if(skinvar==2)
+	     s2.home_menu();
+	  }
+	  c.showmouseptr();
+	}
+	--credy;
+
+   }//while ends
+}
+void common::doexit()/*exit page*/
+{  cleardevice();
+   cleardevice();
+   c.hidemouseptr();
+   cleardevice();
+   c.showmouseptr();
+   setcolor(maincolor);
+   if(skinvar==1)
+  { setbkcolor(bkcolor);
+   settextstyle(0,0,2);
+   outtextxy(40+20+15,100+15,"ARE YOU SURE YOU WANT TO EXIT");
+   setcolor(maincolor);
+   c.right_icon(100,250);
+   c.wrong_icon(500,250);
+   c.showmouseptr();
+   s1.circle_button_boundary(100,250,40);
+   s1.circle_button_boundary(500,250,40);
+  }
+  if(skinvar==2)
+  {setbkcolor(0);
+   settextstyle(0,0,2);
+   outtextxy(40+20+15,100+15,"ARE YOU SURE YOU WANT TO EXIT");
+   setcolor(15);
+   c.right_icon(100,250);
+   c.wrong_icon(500,250);
+   c.showmouseptr();
+   s2.rectangle_button_boundary(100-40,250-40,100+40,250+40);
+   s2.rectangle_button_boundary(500-40,250-40,500+40,250+40);
+  }
+   button=0;
+   ext=1;
+   while(ext!=0)
+   {   c.getmousepos(&button, &x, &y);
+       if((button &1)==1)
+	{ c.hidemouseptr();
+	  if(x>100-40&&x<100+40&&y>250-40&&y<250+40)
+	  {  c.fill_button(130,250);
+	     delay(100);
+	     nosound();
+	     exit(0);
+	  }
+	  if(x>500-40&&x<500+40&&y>250-40&&y<250+40)
+	  { c.fill_button(530,250);
+	    delay(100);
+	    ext=0;
+	    cleardevice();
+	    c.showmouseptr();
+	    if(skinvar==1)
+	    s1.home_menu();
+	    if(skinvar==2)
+	    s2.home_menu();
+	  }
+	  c.showmouseptr();
+	}
+   }
+}
+void common::settings() /*settings page*/
+{ cleardevice();
+  delay(200);
+  if(skinvar==1)
+ {s1.circle_button_boundary(100,200,40);
+  s1.circle_button_boundary(100,300,40);
+  s1.circle_button_boundary(100,400,40);
+  s1.circle_button_boundary(27,30,16);
+ }
+ if(skinvar==2)
+ {s2.rectangle_button_boundary(100-40,200-40,100+40,200+40);
+  s2.rectangle_button_boundary(100-40,300-40,100+40,300+40);
+  s2.rectangle_button_boundary(100-40,400-40,100+40,400+40);
+  s2.rectangle_button_boundary(27-16,30-16,27+16,30+16);
+ }
+  c.bkground_icon(100,200);
+  c.skin_icon(100,300);
+  c.color_icon(100,400);
+  settextstyle(0,0,3);
+  outtextxy(150,200,"CHANGE BACKGROUND");
+  outtextxy(150,300,"CHANGE SKIN");
+  outtextxy(150,400,"CHANGE COLOUR");
+  c.back_icon(30,30);
+  c.showmouseptr();
+  button=0;
+   ext=1;
+   while(ext!=0)
+   {        c.getmousepos(&button, &x, &y);
+      if((button &1)==1)
+	{ c.hidemouseptr();
+	  if(x>27-16&&x<27+16&&y>30-16&&y<30+16)
+	  {  c.fill_button(30,28);
+	     delay(100);
+	     ext=0;
+	     cleardevice();
+	     c.showmouseptr();
+	     if(skinvar==1)
+	     s1.home_menu();
+	     if(skinvar==2)
+	     s2.home_menu();
+	  }
+	  if(x>100-40&&x<100+40&&y>400-40&&y<400+40)
+	  {  c.fill_button(125,400);
+	     delay(100);
+	     maincolor++;
+	    if(maincolor==0||maincolor>9)
+	      maincolor=1;
+	    if(maincolor==bkcolor)
+	      maincolor+=1;
+	      ext=0;
+	      itoa(maincolor,colorchar,10);
+	      skin.open("color.txt",ios::app);
+	      skin<<colorchar;
+	      skin.close();
+	    cleardevice();
+	    c.showmouseptr();
+	    cleardevice();
+	    if(skinvar==1)
+	    s1.home_menu();
+	    if(skinvar==2)
+	    s2.home_menu();
+	  }
+	  if(x>100-40&&x<100+40&&y>200-40&&y<200+40)
+	  { c.fill_button(125,470);
+	    delay(100);
+	    if(skinvar==2)
+	    {cleardevice();
+	     settextstyle(0,0,2);
+	     outtextxy(150,200+15,"you cant change bakground");
+	     outtextxy(200,250+15,"in this skin");
+	     delay(1000);
+	    }
+	    bkcolor++;
+	    if(bkcolor==15||bkcolor>9)
+	      bkcolor=0;
+	      if(bkcolor==maincolor)
+	      bkcolor+=2;
+	      ext=0;
+	      itoa(bkcolor,bkchar,10);
+	      skin.open("bkground.txt",ios::app);
+	      if(skinvar==1)
+	      skin<<bkchar;
+	      skin.close();
+	    cleardevice();
+	    c.showmouseptr();
+	    cleardevice();
+	    if(skinvar==1)
+	    s1.home_menu();
+	    if(skinvar==2)
+	    s2.home_menu();
+	  }
+	    if(x>100-40&&x<100+40&&y>300-40&&y<300+40)
+	    { c.fill_button(100,300);
+	      delay(100);
+	      skin.open("skin.txt",ios::app);
+	      if(skinvar==1)
+	      { skinvar=2;
+	      skin<<"b";
+	      s2.home_menu();
+	      }
+	      if(skinvar==2)
+	      { skinvar=1;
+	      skin<<"a";
+	      s1.home_menu();
+	      }
+	      skin.close();
+	    }
+	  c.showmouseptr();
+	}
+    }
+}
+void common::doplay1() /*plays file values in composer*/
+{ fstream ply;
+  gotoxy(5,9);
+  cout<<"Enter name of file (with extention):";
+  gets(filename);                 //takes name of file
+  setcolor(14);
+  setfillstyle(1,0);
+  bar(0,123,640,185);
+  ply.open(filename,ios::in);   //opens file
+  if(!ply)
+  {  gotoxy(5,9);
+    cout<<"That file dose not exist :(";
+    cout<<"\n\n\t  Press any key to continue";
+    getch();
+    setcolor(14);
+    setfillstyle(1,0);
+    bar(0,123,640,185);
+    composer_conditions();
+  }
+  while(!ply.eof())
+  {  ply>>k;    //reads file value
+    if(k!='b')
+    { //_________________________________________
+    if(tone==1)  //if tone mode is 1 comparing k assigns value to k
+    {
+    if(k=='a')
+       key=97;
+    if(k=='s')
+       key=115;
+    if(k=='d')
+       key=100;
+    if(k=='f')
+       key=102;
+    if(k=='g')
+       key=103;
+    if(k=='h')
+       key=104;
+    if(k=='j')
+       key=106;
+    if(k=='k')
+       key=107;
+    if(k=='l')
+       key=108;
+    if(k=='c')
+       key=59;
+    if(k=='z')
+       key=39;
+    if(k=='q')
+       key=13;
+       //______ for black_____
+    if(k=='w')
+       key=119;
+    if(k=='e')
+       key=101;
+    if(k=='t')
+       key=116;
+    if(k=='y')
+       key=121;
+    if(k=='u')
+       key=117;
+    if(k=='o')
+       key=111;
+    if(k=='p')
+       key=112;
+    if(k=='x')
+       key=93;
+       //______________
+       c.tone2_conditions(); //it reads value of k and play sound according to it
+       delay(del);
+       nosound();
+	}
+	//_________________________________________________
+	//_________________________________________
+    if(tone==2) // if tone mode is 2
+    {
+    if(k=='a')
+       key=97;
+    if(k=='s')
+       key=115;
+    if(k=='d')
+       key=100;
+    if(k=='f')
+       key=102;
+    if(k=='g')
+       key=103;
+    if(k=='h')
+       key=104;
+    if(k=='j')
+       key=106;
+    if(k=='k')
+       key=107;
+    if(k=='l')
+       key=108;
+    if(k=='c')
+       key=59;
+    if(k=='z')
+       key=39;
+    if(k=='q')
+       key=13;
+       //______ for black_____
+    if(k=='w')
+       key=119;
+    if(k=='e')
+       key=101;
+    if(k=='t')
+       key=116;
+    if(k=='y')
+       key=121;
+    if(k=='u')
+       key=117;
+    if(k=='o')
+       key=111;
+    if(k=='p')
+       key=112;
+    if(k=='x')
+       key=93;
+       //______________
+       c.tone2_conditions();
+	}
+	//_________________________________________________
+    }
+    delay(1);
+  }
+  ply.close();
+  nosound();
+}
+void common::composer_conditions()//this function takes the conditions for composer page
+{ showmouseptr();
+  record=0;
+  button=0;
+  bd=0;
+   ext=1;
+   while(ext!=0)
+   {   ////////////////////////////////////////////////////////////////////
+      if(record==1)                             //----------|
+      {	rc.open(filename1,ios::app);                      //|
+	if(bd==1)                                         //|
+	{ rc<<k;                                	  //|
+	  bd=0;                                 	  //|-------recording section
+	}                                       	  //|
+      else if(bd==0)                            	  //|
+       rc<<k1;                                  	  //|
+      rc.close();                               	  //|
+      }                                         //----------|
+     /////////////////////////////////////////////////////////////////////
+       c.getmousepos(&button, &x, &y);
+       if((button &1)==1)
+	{ c.hidemouseptr();
+		if(x>420-30&&x<420+30&&y>30-30&&y<30+30)// if clicks on patt icon go to patt maker page
+		{  c.fill_button(432,30);
+		   delay(100);
+		   ext=0;
+		   cleardevice();
+		   c.showmouseptr();
+		   if(skinvar==1)
+		   s1.draw_pattern_maker_page();
+		   if(skinvar==2)
+		   s2.draw_pattern_maker_page();
+		}
+		if(x>600-20&&x<600+20&&y>30-20&&y<30+20)//if clicks on X go to exit page
+		{ c.fill_button(605,30);
+		  delay(100);
+		  ext=0;
+		  c.showmouseptr();
+		  c.doexit();
+		}
+		///////////////////////////////////////*************
+		if(record==0&&x>400-20&&x<400+20&&y>100-20&&y<100+20)//if clicks on record then accept name of file and activate record section
+		{ c.fill_button(415,100);
+		  delay(100);
+		  if(skinvar==1)
+		  {
+		   setfillstyle(1,0);
+		   fillellipse(400,100,20,20);
+		   c.record_icon(400,100);
+		   s1.circle_button_boundary(400,100,20);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(400-20,100-20,400+20,100+20);
+		    c.record_icon(400,100);
+		    s2.rectangle_button_boundary(400-20,100-20,400+20,100+20);
+		   }
+		  record=1;
+		  gotoxy(5,9);
+		  cout<<"Enter name of file(with extention):";
+		  gets(filename1);   //accepts name of file
+		  setcolor(14);
+		  setfillstyle(1,0);
+		  bar(0,123,640,185);
+		}
+		if(record==1&&x>450-20&&x<450+20&&y>100-20&&y<100+20) //if clicks on stop then deactivate the record section
+		{ c.fill_button(459,100);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(450,100,20,20);
+		   c.stop_icon(450,100);
+		   s1.circle_button_boundary(450,100,20);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(450-20,100-20,450+20,100+20);
+		    c.stop_icon(450,100);
+		    s2.rectangle_button_boundary(450-20,100-20,450+20,100+20);
+		   }
+		  record=0;
+		}
+		////____________________________
+		if(x>500-20&&x<500+20&&y>100-20&&y<100+20)//if clicks on open then call to doplay1()
+		{ c.fill_button(509,100);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(500,100,20,20);
+		   c.open_icon(500,100);
+		   s1.circle_button_boundary(500,100,20);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(500-20,100-20,500+20,100+20);
+		    c.open_icon(500,100);
+		    s2.rectangle_button_boundary(500-20,100-20,500+20,100+20);
+		   }
+		  c.doplay1();
+		}
+		//_______________________________
+		////////////////////////////////////****************
+		if(x>487-20&&x<487+20&&y>30-20&&y<30+20) //if clicks on <- icon go to home
+		{  c.fill_button(490,27);
+		   delay(100);
+		   ext=0;
+		   cleardevice();
+		   c.showmouseptr();
+		   if(skinvar==1)
+		   s1.home_menu();
+		   if(skinvar==2)
+		   s2.home_menu();
+		}
+		if(x>540-20&&x<540+20&&y>30-20&&y<30+20)// if clicks on ? then go to help page
+		{ c.fill_button(535,32);
+		delay(100);
+		c.showmouseptr();
+		c.help(1);
+		}
+		if(x>50-20&&x<50+20&&y>100-20&&y<100+20)//if clicks on tone 1 button then tone mode=1
+		{ c.fill_button(50,98);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(50,100,15,15);
+		   c.tone1(50,100);
+		   s1.circle_button_boundary(50,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(50-15,100-15,50+15,100+15);
+		    c.tone1(50,100);
+		    s2.rectangle_button_boundary(50-15,100-15,50+15,100+15);
+		   }
+		  tone=1;
+		}
+		if(x>100-20&&x<100+20&&y>100-20&&y<100+20)//if clicks on tone 2 button then tone mode =2
+		{ c.fill_button(100,98);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(100,100,15,15);
+		   c.tone2(100,100);
+		   s1.circle_button_boundary(100,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(100-15,100-15,100+15,100+15);
+		    c.tone2(100,100);
+		    s2.rectangle_button_boundary(100-15,100-15,100+15,100+15);
+		   }
+		  tone=2;
+		}
+		if(x>150-20&&x<150+20&&y>100-20&&y<100+20)//if clicks on tone 2 button then tone mode =2
+		{ c.fill_button(150,98);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(150,100,15,15);
+		   c.tone3(150,100);
+		   s1.circle_button_boundary(150,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(150-15,100-15,150+15,100+15);
+		    c.tone3(150,100);
+		    s2.rectangle_button_boundary(150-15,100-15,150+15,100+15);
+		   }
+		  tone=3;
+		}
+		   if(x>320-20&&x<320+20&&y>465-20&&y<465+20) //if clicks on wide stop icon then no sound
+		    { c.fill_button(320,472);
+		      delay(100);
+		      if(skinvar==1)
+		     {setfillstyle(1,0);
+		      fillellipse(320,465,20,20);
+		      c.stop_icon2(320,465);
+		      s1.circle_button_boundary(320,465,20);
+		     }
+		      if(skinvar==2)
+		     {setfillstyle(1,0);
+		      bar(320-20,465-20,320+20,465+20);
+		      c.stop_icon2(320,465);
+		      s2.rectangle_button_boundary(320-20,465-20,320+20,465+20);
+		     }
+		      nosound();
+		    }
+		    if(x>135&&x<485+70&&y>200&&y<400)//if mouse clicked on composer's keys then give sound
+		   { c.sound_with_mouse();
+		   }
+		c.showmouseptr();
+	}
+	 if(kbhit()) //if keyboard hitted
+	 { key=getch();
+	   if(key!=0&&tone==1)
+	   { c.tone2_conditions(); //takes value of key and plays sound according to it
+	     bd=1;
+	     delay(del);    //   after delay
+	     nosound();    //  sound stops
+	   }
+	   if(key!=0&&tone==2)
+	   { c.tone2_conditions(); //takes value of key and plays sound according to it
+	   }
+	   if(key!=0&&tone==3)
+	   { c.tone3_conditions(); //takes value of key and plays sound repeatedly according to it
+	   }
+	   if(key==8) // if backspace pressed then go to home
+	   {  c.fill_button(490,27);
+	       delay(100);
+	      ext=0;
+	      cleardevice();
+		c.showmouseptr();
+	       if(skinvar==1)
+	       s1.home_menu();
+	       if(skinvar==2)
+	       s2.home_menu();
+	   }
+	   if(key==32)  //if spacebar pressed then stop sound
+	    {c.fill_button(320,472);
+	     delay(100);
+	     if(skinvar==1)
+	     {setfillstyle(1,0);
+	     fillellipse(320,465,20,20);
+	     c.stop_icon2(320,465);
+	     s1.circle_button_boundary(320,465,20);
+	     }
+	     if(skinvar==2)
+	     {setfillstyle(1,0);
+	     bar(320-20,465-20,320+20,465+20);
+	     c.stop_icon2(320,465);
+	     s2.rectangle_button_boundary(320-20,465-20,320+20,465+20);
+	     }
+	     nosound();
+	   }
+	 } //end of if(button==1)
+   } ///////////end of while
+}////end of composer conditions function
+//________________those functions which takes the color value and make key with that color
+void common::keya(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140,305,160,395);
+}
+void common::keys(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+35,305,160+35,395);
+}
+void common::keyd(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+70,305,160+70,395);
+}
+void common::keyf(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+105,305,160+105,395);
+}
+void common::keyg(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+140,305,160+140,395);
+}
+void common::keyh(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+175,305,160+175,395);
+}
+void common::keyj(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+210,305,160+210,395);
+}
+void common::keyk(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+245,305,160+245,395);
+}
+void common::keyl(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+280,305,160+280,395);
+}
+void common::keyc(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+315,305,160+315,395);
+}
+void common::keyz(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+315+35,305,160+315+35,395);
+}
+void common::keyq(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(140+315+70,305,160+315+70,395);
+}
+void common::keyw(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(158+5,200+5,178-5,300-5);  //w
+}
+void common::keye(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+  bar(193+5,200+5,213-5,300-5);  //e
+}
+void common::keyt(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(263+5,200+5,283-5,300-5);  //t
+}
+void common::keyy(int kcolor)
+{setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(298+5,200+5,318-5,300-5);  //y
+}
+void common::keyu(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(333+5,200+5,353-5,300-5);  //u
+}
+void common::keyo(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(403+5,200+5,423-5,300-5);  //o
+}
+void common::keyp(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(438+5,200+5,458-5,300-5);  //p
+}
+void common::keyx(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(508+5,200+5,528-5,300-5);  //x
+}
+//_______________-end of keys functions-_____________
+void common::tone2_conditions()
+{            if(key==49)    // if pressed 1 then tone mode =1
+		{ c.fill_button(50,98);
+		  delay(100);
+		  if(skinvar==1)
+		  {
+		   setfillstyle(1,0);
+		   fillellipse(50,100,15,15);
+		   c.tone1(50,100);
+		   s1.circle_button_boundary(50,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(50-15,100-15,50+15,100+15);
+		    c.tone1(50,100);
+		    s2.rectangle_button_boundary(50-15,100-15,50+15,100+15);
+		   }
+		  tone=1;
+		}
+		if(key==50) // if pressed 2 then tone mode =2
+		{ c.fill_button(100,98);
+		  delay(100);
+		  if(skinvar==1)
+		  {
+		   setfillstyle(1,0);
+		   fillellipse(100,100,15,15);
+		   c.tone2(100,100);
+		   s1.circle_button_boundary(100,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(100-15,100-15,100+15,100+15);
+		    c.tone2(100,100);
+		    s2.rectangle_button_boundary(100-15,100-15,100+15,100+15);
+		   }
+
+		  tone=2;
+		}
+		if(key==51) // if pressed 3 then tone mode =3
+		{ c.fill_button(150,98);
+		  delay(100);
+		  if(skinvar==1)
+		  {
+		   setfillstyle(1,0);
+		   fillellipse(150,100,15,15);
+		   c.tone3(150,100);
+		   s1.circle_button_boundary(150,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(150-15,100-15,150+15,100+15);
+		    c.tone3(150,100);
+		    s2.rectangle_button_boundary(150-15,100-15,150+15,100+15);
+		   }
+		  tone=3;
+		}
+	    if(key==97) // if 'a' was pressed
+	   { sound(sa);
+	     keya(10);
+	     delay(50);
+	     keya(15);
+	     strcpy(&k,&h1);
+	     record=1;
+	   }
+	   if(key==115) // if 's' was pressed
+	   { sound(ss);
+	     keys(10);
+	     delay(50);
+	     keys(15);
+	     strcpy(&k,&h2);
+	     record=1;
+	   }
+	   if(key==100) // if 'd' was pressed
+	   { sound(sd);
+	     keyd(10);
+	     delay(50);
+	     keyd(15);
+	     strcpy(&k,&h3);
+	   }
+	   if(key==102) // if 'f' was pressed
+	   { sound(sf);
+	     keyf(10);
+	     delay(50);
+	     keyf(15);
+	     strcpy(&k,&h4);
+	   }
+	   if(key==103) // if 'g' was pressed
+	   { sound(sg);
+	     keyg(10);
+	     delay(50);
+	     keyg(15);
+	     strcpy(&k,&h5);
+	   }
+	   if(key==104) // if 'h' was pressed
+	   { sound(sh);
+	     keyh(10);
+	     delay(50);
+	     keyh(15);
+	     strcpy(&k,&h6);
+	   }
+	   if(key==106) // if 'j' was pressed
+	   { sound(sj);
+	     keyj(10);
+	     delay(50);
+	     keyj(15);
+	     strcpy(&k,&h7);
+	   }
+	   if(key==107) // if 'k' was pressed
+	   { sound(sk);
+	     keyk(10);
+	     delay(50);
+	     keyk(15);
+	     strcpy(&k,&h8);
+	   }
+	   if(key==108)// if 'l' was pressed
+	   { sound(sl);
+	     keyl(10);
+	     delay(50);
+	     keyl(15);
+	     strcpy(&k,&h9);
+	   }
+	   if(key==59) // if ';' was pressed
+	   { sound(sc);
+	     keyc(10);
+	     delay(50);
+	     keyc(15);
+	     strcpy(&k,&h10);
+	   }
+	   if(key==39)// if ' ' ' was pressed
+	   { sound(sz);
+	     keyz(10);
+	     delay(50);
+	     keyz(15);
+	     strcpy(&k,&h11);
+	   }
+	   if(key==13)  // if 'enter' was pressed
+	   { sound(sq);
+	     keyq(10);
+	     delay(50);
+	     keyq(15);
+	     strcpy(&k,&h12);
+	   }      ///////////
+	   if(key==119)  // if 'w' was pressed
+	   { sound(sw);
+	     keyw(10);
+	     delay(50);
+	     keyw(0);
+	     strcpy(&k,&h13);
+	   }
+	   if(key==101) // if 'e' was pressed
+	   { sound(se);
+	     keye(10);
+	     delay(50);
+	     keye(0);
+	     strcpy(&k,&h14);
+	   }
+	   if(key==116) // if 't' was pressed
+	   { sound(st);
+	     keyt(10);
+	     delay(50);
+	     keyt(0);
+	     strcpy(&k,&h15);
+	   }
+	   if(key==121) // if 'y' was pressed
+	   { sound(sy);
+	     keyy(10);
+	     delay(50);
+	     keyy(0);
+	     strcpy(&k,&h16);
+	   }
+	   if(key==117)// if 'u' was pressed
+	   { sound(su);
+	     keyu(10);
+	     delay(50);
+	     keyu(0);
+	     strcpy(&k,&h17);
+	   }
+	   if(key==111) // if 'o' was pressed
+	   { sound(so);
+	     keyo(10);
+	     delay(50);
+	     keyo(0);
+	     strcpy(&k,&h18);
+	   }
+	   if(key==112)  // if 'p' was pressed
+	   { sound(sp);
+	     keyp(10);
+	     delay(50);
+	     keyp(0);
+	     strcpy(&k,&h19);
+	   }
+	   if(key==93) // if '[' was pressed
+	   { sound(sx);
+	     keyx(10);
+	     delay(50);
+	     keyx(0);
+	     strcpy(&k,&h20);
+	    }
+}
+void common::tone3_conditions() //same condition as in tone 1 condition function but for loops are used in this which r responsible for repeted sound
+{ 	    if(key==49)
+		{ c.fill_button(50,98);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(50,100,15,15);
+		   c.tone1(50,100);
+		   s1.circle_button_boundary(50,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(50-15,100-15,50+15,100+15);
+		    c.tone1(50,100);
+		    s2.rectangle_button_boundary(50-15,100-15,50+15,100+15);
+		   }
+		  tone=1;
+		}
+		if(key==50)
+		{ c.fill_button(100,98);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(100,100,15,15);
+		   c.tone2(100,100);
+		   s1.circle_button_boundary(100,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(100-15,100-15,100+15,100+15);
+		    c.tone2(100,100);
+		    s2.rectangle_button_boundary(100-15,100-15,100+15,100+15);
+		   }
+		  tone=2;
+		}
+		if(key==51)
+		{ c.fill_button(150,98);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(150,100,15,15);
+		   c.tone3(150,100);
+		   s1.circle_button_boundary(150,100,15);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(150-15,100-15,150+15,100+15);
+		    c.tone3(150,100);
+		    s2.rectangle_button_boundary(150-15,100-15,150+15,100+15);
+		   }
+		  tone=3;
+		}
+	   if(key==97)
+	   { for(int la=0;!kbhit();++la)
+	     { sound(sa);
+	       keya(10);
+	       delay(del2);
+	       keya(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==115)
+	   { for(int ls=0;!kbhit();++ls)
+	     { sound(ss);
+	       keys(10);
+	       delay(del2);
+	       keys(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==100)
+	   { for(int ld=0;!kbhit();++ld)
+	     {  sound(sd);
+	       keyd(10);
+	       delay(del2);
+	       keyd(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==102)
+	   { for(int lf=0;!kbhit();++lf)
+	     {  sound(sf);
+	       keyf(10);
+	       delay(del2);
+	       keyf(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==103)
+	   { for(int lg=0;!kbhit();++lg)
+	     {sound(sg);
+	       keyg(10);
+	       delay(del2);
+	       keyg(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==104)
+	   { for(int lh=0;!kbhit();++lh)
+	     {  sound(sh);
+	       keyh(10);
+	       delay(del2);
+	       keyh(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==106)
+	   { for(int lj=0;!kbhit();++lj)
+	     { sound(sj);
+	       keyj(10);
+	       delay(del2);
+	       keyj(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==107)
+	   { for(int lk=0;!kbhit();++lk)
+	     { sound(sk);
+	       keyk(10);
+	       delay(del2);
+	       keyk(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==108)
+	   { for(int ll=0;!kbhit();++ll)
+	     { sound(sl);
+	       keyl(10);
+	       delay(del2);
+	       keyl(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==59)
+	   { for(int lc=0;!kbhit();++lc)
+	     { sound(sc);
+	       keyc(10);
+	       delay(del2);
+	       keyc(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==39)
+	   { for(int lz=0;!kbhit();++lz)
+	     { sound(sz);
+	       keyz(10);
+	       delay(del2);
+	       keyz(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==13)
+	   { for(int lq=0;!kbhit();++lq)
+	     { sound(sq);
+	       keyq(10);
+	       delay(del2);
+	       keyq(15);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	    ///////////
+	   if(key==119)
+	   { for(int lw=0;!kbhit();++lw)
+	     { sound(sw);
+	       keyw(10);
+	       delay(del2);
+	       keyw(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==101)
+	   { for(int le=0;!kbhit();++le)
+	     { sound(se);
+	       keye(10);
+	       delay(del2);
+	       keye(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==116)
+	   { for(int lt=0;!kbhit();++lt)
+	     { sound(st);
+	       keyt(10);
+	       delay(del2);
+	       keyt(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==121)
+	   { for(int ly=0;!kbhit();++ly)
+	     { sound(sy);
+	       keyy(10);
+	       delay(del2);
+	       keyy(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==117)
+	   { for(int lu=0;!kbhit();++lu)
+	     { sound(su);
+	       keyu(10);
+	       delay(del2);
+	       keyu(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==111)
+	   { for(int lo=0;!kbhit();++lo)
+	     { sound(so);
+	       keyo(10);
+	       delay(del2);
+	       keyo(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==112)
+	   { for(int lp=0;!kbhit();++lp)
+	     { sound(sp);
+	       keyp(10);
+	       delay(del2);
+	       keyp(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+	   if(key==93)
+	   { for(int lx=0;!kbhit();++lx)
+	     { sound(sx);
+	       keyx(10);
+	       delay(del2);
+	       keyx(0);
+	       nosound();
+	       delay(del2);
+	     }
+	   }
+}
+void common::sound_with_mouse()//in composer page this function checks area where mouse is clicked then it plays sound according to it
+{ if(x>=135&&x<=165&&y>=300&&y<=400||x>=135&&x<=158&&y>=200&&y<=300)
+  { sound(sa);
+    keya(10);
+    delay(del);
+    nosound();
+    keya(15);
+  }
+  if(x>=170&&x<=200&&y>=300&&y<=400||x>=178&&x<=193&&y>=200&&y<=300)
+  { sound(ss);
+    keys(10);
+    delay(del);
+    nosound();
+    keys(15);
+  }
+  if(x>=205&&x<=235&&y>=300&&y<=400||x>=213&&x<=235&&y>=200&&y<=300)
+  { sound(sd);
+    keyd(10);
+    delay(del);
+    nosound();
+    keyd(15);
+  }
+  if(x>=240&&x<=270&&y>=300&&y<=400||x>=240&&x<=263&&y>=200&&y<=300)
+  { sound(sf);
+    keyf(10);
+    delay(del);
+    nosound();
+    keyf(15);
+  }
+  if(x>=275&&x<=305&&y>=300&&y<=400||x>=283&&x<=298&&y>=200&&y<=300)
+  { sound(sg);
+    keyg(10);
+    delay(del);
+    nosound();
+    keyg(15);
+  }
+  if(x>=310&&x<=340&&y>=300&&y<=400||x>=318&&x<=333&&y>=200&&y<=300)
+  { sound(sh);
+    keyh(10);
+    delay(del);
+    nosound();
+    keyh(15);
+  }
+  if(x>=345&&x<=375&&y>=300&&y<=400||x>=353&&x<=375&&y>=200&&y<=300)
+  { sound(sj);
+    keyj(10);
+    delay(del);
+    nosound();
+    keyj(15);
+   }
+  if(x>=380&&x<=410&&y>=300&&y<=400||x>=380&&x<=403&&y>=200&&y<=300)
+  { sound(sk);
+    keyk(10);
+    delay(del);
+    nosound();
+    keyk(15);
+  }
+  if(x>=415&&x<=445&&y>=300&&y<=400||x>=423&&x<=438&&y>=200&&y<=300)
+  { sound(sl);
+    keyl(10);
+    delay(del);
+    nosound();
+    keyl(15);
+  }
+  if(x>=450&&x<=480&&y>=300&&y<=400||x>=458&&x<=480&&y>=200&&y<=300)
+  { sound(sc);
+    keyc(10);
+    delay(del);
+    nosound();
+    keyc(15);
+   }
+  if(x>=485&&x<=485+30&&y>=300&&y<=400||x>=485&&x<=508&&y>=200&&y<=300)
+  { sound(sz);
+    keyz(10);
+    delay(del);
+    nosound();
+    keyz(15);
+  }
+  if(x>=520&&x<=555&&y>=300&&y<=400||x>=528&&x<=555&&y>=200&&y<=300)
+  { sound(sq);
+    keyq(10);
+    delay(del);
+    nosound();
+    keyq(15);
+  }
+  ///////////
+  if(x>=158&&x<=178&&y>=200&&y<=300)
+  { sound(sw);
+    keyw(10);
+    delay(del);
+    nosound();
+    keyw(0);
+  }
+  if(x>=193&&x<=213&&y>=200&&y<=300)
+  { sound(se);
+    keye(10);
+    delay(del);
+    nosound();
+    keye(0);
+  }
+  if(x>=263&&x<=283&&y>=200&&y<=300)
+  { sound(st);
+    keyt(10);
+    delay(del);
+    nosound();
+    keyt(0);
+  }
+  if(x>=298&&x<=318&&y>=200&&y<=300)
+  { sound(sy);
+    keyy(10);
+    delay(del);
+    nosound();
+    keyy(0);
+  }
+  if(x>=333&&x<=353&&y>=200&&y<=300)
+  { sound(su);
+    keyu(10);
+    delay(del);
+    nosound();
+    keyu(0);
+  }
+  if(x>=403&&x<=423&&y>=200&&y<=300)
+  { sound(so);
+    keyo(10);
+    delay(del);
+    nosound();
+    keyo(0);
+  }
+  if(x>=438&&x<=458&&y>=200&&y<=300)
+  { sound(sp);
+    keyp(10);
+    delay(del);
+    nosound();
+    keyp(0);
+  }
+  if(x>=508&&x<=528&&y>=200&&y<=300)
+  { sound(sx);
+    keyx(10);
+    delay(del);
+    nosound();
+    keyx(0);
+  }
+}//end of sound with mouse function
+void common::key_loop() //this fuction makes keys on composer page
+{ for (int kl=100+35;kl<=485+35;kl+=35)
+  {setcolor(0);
+   setfillstyle(1,15);
+   bar(kl,200,kl+30,400);     //a to ;
+  }
+  int y=getbkcolor();
+  setcolor(y);
+  setfillstyle(1,y);
+  bar(158,200,178,300);  //w
+  bar(193,200,213,300);  //e
+  bar(263,200,283,300);  //t
+  bar(298,200,318,300);  //y
+  bar(333,200,353,300);  //u
+  bar(403,200,423,300);  //o
+  bar(438,200,458,300);  //p
+  bar(508,200,528,300);  //for ] }
+}
+void common::key_loop2()//this function makes keys on patt maker page
+{  int d=getbkcolor();
+   setcolor(0);
+   setfillstyle(1,15);
+   bar(0,100,50,330);
+   setcolor(d);
+   setfillstyle(1,d);
+   bar(0,110,25,120);
+   bar(0,140,25,150);
+   bar(0,160,25,170);
+   bar(0,190,25,200);
+   bar(0,210,25,220);
+   bar(0,230,25,240);
+   bar(0,260,25,270);
+   bar(0,280,25,290);
+   bar(0,310,25,320);
+   line(0,115,50,115);
+   line(0,130,50,130);
+   line(0,145,50,145);
+   line(0,165,50,165);
+   line(0,180,50,180);
+   line(0,195,50,195);
+   line(0,215,50,215);
+   line(0,235,50,235);
+   line(0,250,50,250);
+   line(0,265,50,265);
+   line(0,285,50,285);
+   line(0,300,50,300);
+   line(0,315,50,315);
+}
+///_________________these function makes horizontal keys on patt maker page___________________
+void common::hkeya_3(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,315+5,50-5,330-5);
+}
+void common::hkeya_1(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,300+5,50-5,315-5);
+}
+void common::hkeya(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,285+5,50-5,300-5);
+}
+void common::hkeys(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,265+5,50-5,285-5);
+}
+void common::hkeyd(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,250+5,50-5,265-5);
+}
+void common::hkeyf(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,235+5,50-5,250-5);
+}
+void common::hkeyg(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,215+5,50-5,235-5);
+}
+void common::hkeyh(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,195+5,50-5,215-5);
+}
+void common::hkeyj(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,180+5,50-5,195-5);
+}
+void common::hkeyk(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,165+5,50-5,180-5);
+}
+void common::hkeyl(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,145+5,50-5,165-5);
+}
+void common::hkeyc(int kcolor)  //for ; :
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,130+5,50-5,145-5);
+}
+void common::hkeyz(int kcolor)  //for ' "
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,115+5,50-5,130-5);
+}
+void common::hkeyq(int kcolor)  //for enter key
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(25+5,100+5,50-5,115-5);
+}
+void common::hkeyw(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,280+5,25-5,290-5);
+}
+void common::hkeye(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,260+5,25-5,270-5);
+}
+void common::hkeyt(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,230+5,25-5,240-5);
+}
+void common::hkeyy(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,210+5,25-5,220-5);
+}
+void common::hkeyu(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,190+5,25-5,200-5);
+}
+void common::hkeyo(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,160+5,25-5,170-5);
+}
+void common::hkeyp(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,140+5,25-5,150-5);
+}
+void common::hkeya_2(int kcolor)
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,310+5,25-5,320-5);
+}
+void common::hkeyx(int kcolor)  //for ] }
+{ setcolor(kcolor);
+ setfillstyle(1,kcolor);
+ bar(0+5,110+5,25-5,120-5);
+}
+///____________________________________________________________________
+void common::sound_with_mouse2()//in patt page this function checks area where mouse is clicked then it plays sound according to it
+{   if(x>=25&&x<=50&&y>=285&&y<=300||x>=0&&x<=25&&y>=290&&y<=300)
+  { sound(sa);
+    hkeya(10);
+    delay(del);
+    nosound();
+    hkeya(15);
+  }
+  if(x>=25&&x<=50&&y>=265&&y<=285||x>=0&&x<=25&&y>=270&&y<=280)
+  { sound(ss);
+    hkeys(10);
+    delay(del);
+    nosound();
+    hkeys(15);
+  }
+  if(x>=25&&x<=50&&y>=250&&y<=265||x>=0&&x<=25&&y>=250&&y<=260)
+  { sound(sd);
+    hkeyd(10);
+    delay(del);
+    nosound();
+    hkeyd(15);
+  }
+  if(x>=25&&x<=50&&y>=235&&y<=250||x>=0&&x<=25&&y>=240&&y<=250)
+  { sound(sf);
+    hkeyf(10);
+    delay(del);
+    nosound();
+    hkeyf(15);
+  }
+  if(x>=25&&x<=50&&y>=215&&y<=235||x>=0&&x<=25&&y>=220&&y<=230)
+  { sound(sg);
+    hkeyg(10);
+    delay(del);
+    nosound();
+    hkeyg(15);
+  }
+  if(x>=25&&x<=50&&y>=195&&y<=215||x>=0&&x<=25&&y>=200&&y<=210)
+  { sound(sh);
+    hkeyh(10);
+    delay(del);
+    nosound();
+    hkeyh(15);
+  }
+  if(x>=25&&x<=50&&y>=180&&y<=195||x>=0&&x<=25&&y>=180&&y<=190)
+  { sound(sj);
+    hkeyj(10);
+    delay(del);
+    nosound();
+    hkeyj(15);
+  }
+  if(x>=25&&x<=50&&y>=165&&y<=180||x>=0&&x<=25&&y>=170&&y<=180)
+  { sound(sk);
+    hkeyk(10);
+    delay(del);
+    nosound();
+    hkeyk(15);
+  }
+  if(x>=25&&x<=50&&y>=145&&y<=165||x>=0&&x<=25&&y>=150&&y<=165)
+  { sound(sl);
+    hkeyl(10);
+    delay(del);
+    nosound();
+    hkeyl(15);
+  }
+  if(x>=25&&x<=50&&y>=130&&y<=145||x>=0&&x<=25&&y>=130&&y<=140)
+  { sound(sc);
+    hkeyc(10);
+    delay(del);
+    nosound();
+    hkeyc(15);
+  }
+  if(x>=25&&x<=50&&y>=115&&y<=130||x>=0&&x<=25&&y>=120&&y<=130)
+  { sound(sz);
+    hkeyz(10);
+    delay(del);
+    nosound();
+    hkeyz(15);
+  }
+  if(x>=25&&x<=50&&y>=100&&y<=115||x>=0&&x<=25&&y>=100&&y<=110)
+  { sound(sq);
+    hkeyq(10);
+    delay(del);
+    nosound();
+    hkeyq(15);
+  }
+  if(x>=25&&x<=50&&y>=300&&y<=315||x>=0&&x<=25&&y>=300&&y<=310)
+  { sound(sa_1);
+    hkeya_1(10);
+    delay(del);
+    nosound();
+    hkeya_1(15);
+  }
+  if(x>=25&&x<=50&&y>=315&&y<=330||x>=0&&x<=25&&y>=320&&y<=330)
+  { sound(sa_3);
+    hkeya_3(10);
+    delay(del);
+    nosound();
+    hkeya_3(15);
+  }
+  ///////////
+  if(x>=0&&x<=25&&y>=280&&y<=290)
+  { sound(sw);
+    hkeyw(10);
+    delay(del);
+    nosound();
+    hkeyw(0);
+  }
+  if(x>=0&&x<=25&&y>=260&&y<=270)
+  { sound(se);
+    hkeye(10);
+    delay(del);
+    nosound();
+    hkeye(0);
+  }
+  if(x>=0&&x<=25&&y>=230&&y<=240)
+  { sound(st);
+    hkeyt(10);
+    delay(del);
+    nosound();
+    hkeyt(0);
+  }
+  if(x>=0&&x<=25&&y>=210&&y<=220)
+  { sound(sy);
+    hkeyy(10);
+    delay(del);
+    nosound();
+    hkeyy(0);
+  }
+  if(x>=0&&x<=25&&y>=190&&y<=200)
+  { sound(su);
+    hkeyu(10);
+    delay(del);
+    nosound();
+    hkeyu(0);
+  }
+  if(x>=0&&x<=25&&y>=160&&y<=170)
+  { sound(so);
+    hkeyo(10);
+    delay(del);
+    nosound();
+    hkeyo(0);
+  }
+  if(x>=0&&x<=25&&y>=140&&y<=150)
+  { sound(sp);
+    hkeyp(10);
+    delay(del);
+    nosound();
+    hkeyp(0);
+  }
+  if(x>=0&&x<=25&&y>=110&&y<=120)
+  { sound(sx);
+    hkeyx(10);
+    delay(del);
+    nosound();
+    hkeyx(0);
+  }
+  if(x>=0&&x<=25&&y>=310&&y<=320)
+  { sound(sa_2);
+    hkeya_2(10);
+    delay(del);
+    nosound();
+    hkeya_2(0);
+  }
+}
+void common::tone_conditions()
+{ 	    if(key==97)
+	   { sound(sa);
+	     hkeya(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto a;
+	     else
+	     nosound();
+	     a:
+	     hkeya(15);
+	   }
+	   if(key==115)
+	   { sound(ss);
+	     hkeys(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto s;
+	     else
+	     nosound();
+	     s:
+	     hkeys(15);
+	   }
+	   if(key==100)
+	   { sound(sd);
+	     hkeyd(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto d;
+	     else
+	     nosound();
+	     d:
+	     hkeyd(15);
+	   }
+	   if(key==102)
+	   { sound(sf);
+	     hkeyf(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto f;
+	      else
+	     nosound();
+	     f:
+	     hkeyf(15);
+	   }
+	   if(key==103)
+	   { sound(sg);
+	     hkeyg(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto g;
+	      else
+	     nosound();
+	     g:
+	     hkeyg(15);
+	   }
+	   if(key==104)
+	   { sound(sh);
+	     hkeyh(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto h;
+	      else
+	     nosound();
+	     h:
+	     hkeyh(15);
+	   }
+	   if(key==106)
+	   { sound(sj);
+	     hkeyj(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto j;
+	     else
+	     nosound();
+	     j:
+	     hkeyj(15);
+	   }
+	   if(key==107)
+	   { sound(sk);
+	     hkeyk(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto k;
+	      else
+	     nosound();
+	     k:
+	     hkeyk(15);
+	   }
+	   if(key==108)
+	   { sound(sl);
+	     hkeyl(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto l;
+	      else
+	     nosound();
+	     l:
+	     hkeyl(15);
+	   }
+	   if(key==59)
+	   { sound(sc);
+	     hkeyc(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto c;
+	      else
+	     nosound();
+	     c:
+	     hkeyc(15);
+	   }
+	   if(key==39)
+	   { sound(sz);
+	     hkeyz(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto z;
+	      else
+	     nosound();
+	     z:
+	     hkeyz(15);
+	   }
+	   if(key==13)
+	   { sound(sq);
+	     hkeyq(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto q;
+	      else
+	     nosound();
+	     q:
+	     hkeyq(15);
+	   }      ///////////
+	   if(key==119)
+	   { sound(sw);
+	     hkeyw(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto w;
+	      else
+	     nosound();
+	     w:
+	     hkeyw(0);
+	   }
+	   if(key==101)
+	   { sound(se);
+	     hkeye(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto e;
+	      else
+	     nosound();
+	     e:
+	     hkeye(0);
+	   }
+	   if(key==116)
+	   { sound(st);
+	     hkeyt(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto t;
+	      else
+	     nosound();
+	     t:
+	     hkeyt(0);
+	   }
+	   if(key==121)
+	   { sound(sy);
+	     hkeyy(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto y;
+	      else
+	     nosound();
+	     y:
+	     hkeyy(0);
+	   }
+	   if(key==117)
+	   { sound(su);
+	     hkeyu(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto u;
+	      else
+	     nosound();
+	     u:
+	     hkeyu(0);
+	   }
+	   if(key==111)
+	   { sound(so);
+	     hkeyo(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto o;
+	      else
+	     nosound();
+	     o:
+	     hkeyo(0);
+	   }
+	   if(key==112)
+	   { sound(sp);
+	     hkeyp(10);
+	     delay(del);
+	     if(m2==10&&mode==2)
+	     goto p;
+	      else
+	     nosound();
+	     p:
+	     hkeyp(0);
+	   }
+	   if(key==93)
+	   { sound(sx);              //  if(m2==10&&mode==1)
+	     hkeyx(10);              //  nosound();
+	     delay(del);             //  if(m2!=10&&mode==2)
+	     if(m2==10&&mode==2)     //  nosound();
+	     goto x;                 //   if(m2!=10&&mode==1)
+	     else
+	     nosound();
+	     x:
+	     hkeyx(0);
+	   }
+	   if(key==8)
+	   {  c.fill_button(490,27);
+	      delay(100);
+	       ext=0;
+	       cleardevice();
+		c.showmouseptr();
+	       if(skinvar==1)
+	       s1.home_menu();
+	       if(skinvar==2)
+	       s2.home_menu();
+	   }
+}
+void common::donew()//makes a blank matrix
+{ int kl=getbkcolor();
+  setfillstyle(1,kl);
+  setcolor(kl);
+  bar(51,100,640,330);
+  ///////matrix loop///
+	   setcolor(maincolor);
+   for(int ml=0;ml<=590;ml+=10)
+    line(50+ml,100,50+ml,330);
+   for(int ml2=0;ml2<=230;ml2+=10)
+    line(50,100+ml2,640,100+ml2);
+   /////////////////////
+}
+//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+void common::pattern_maker_conditions()
+{ showmouseptr();
+  button=0;
+   ext=1;
+   pye=1;
+
+   while(ext!=0)
+   {  c.getmousepos(&button, &x, &y);
+       //////////////////////////////////////
+       if(button==2)  //for write click
+       { c.hidemouseptr();
+	if(x>=50&&x<=640&&y>=100&&y<=330)
+	{ setcolor(maincolor);
+	  setfillstyle(1,0);
+	  floodfill(x,y,maincolor);
+	}
+	 c.showmouseptr();
+       }
+       //////////////////////////////////////////
+       if((button &1)==1) //for left click
+	{    c.hidemouseptr();
+		if(x>420-30&&x<420+30&&y>30-30&&y<30+30)
+		{  c.fill_button(432,30);
+		   delay(100);
+		   ext=0;
+		   cleardevice();
+		   c.showmouseptr();
+		   if(skinvar==1)
+		   s1.draw_composer_page();
+		   if(skinvar==2)
+		   s2.draw_composer_page();
+		}
+		if(x>600-20&&x<600+20&&y>30-20&&y<30+20)
+		{ c.fill_button(605,30);
+		  delay(100);
+		  ext=0;
+		  c.showmouseptr();
+		  c.doexit();
+		}
+		if(x>487-20&&x<487+20&&y>30-20&&y<30+20)
+		{  c.fill_button(490,27);
+		   delay(100);
+		   ext=0;
+		   cleardevice();
+		   c.showmouseptr();
+		   if(skinvar==1)
+		   s1.home_menu();
+		   if(skinvar==2)
+		   s2.home_menu();
+		}
+		 if(x>=0&&x<=50&&y>=100&&y<=330)
+		    c.sound_with_mouse2();
+		if(x>540-20&&x<540+20&&y>30-20&&y<30+20)
+		{ c.fill_button(535,32);
+		delay(100);
+		c.showmouseptr();
+		c.help(2);
+		}
+		if(x>=50&&x<=640&&y>=100&&y<=330&&pye==1)
+		{ setfillstyle(1,10);
+		  floodfill(x,y,maincolor);
+		}
+		if(x>=50&&x<=640&&y>=100&&y<=330&&pye==2)
+		{ setcolor(maincolor);
+		  setfillstyle(1,0);
+		  floodfill(x,y,maincolor);
+		}
+		if(x>=120-10&&x<=120+10&&y>=80-10&&y<=80+10)
+		{ fill_button(128,80);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(120,80,10,10);
+		   c.eraser_icon(118,81);
+		   s1.circle_button_boundary2(120,80,10);
+		  }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(120-10,80-10,120+10,80+10);
+		    c.eraser_icon(118,81);
+		    s2.rectangle_button_boundary(120-10,80-10,120+10,80+10);
+		   }
+		   pye=2;
+		}
+		if(x>=100-10&&x<=100+10&&y>=80-10&&y<=80+10)
+		{ fill_button(105,80);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(100,80,10,10);
+		   c.pencil_icon(100,80);
+		   s1.circle_button_boundary2(100,80,10);
+		  }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(100-10,80-10,100+10,80+10);
+		    c.pencil_icon(100,81);
+		    s2.rectangle_button_boundary(100-10,80-10,100+10,80+10);
+		   }
+		   pye=1;
+		}
+		if(x>=60-10&&x<=60+10&&y>=80-10&&y<=80+10)
+		{ fill_button(65,78);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(60,80,10,10);
+		   c.play_icon(62,80);
+		   s1.circle_button_boundary2(60,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(60-10,80-10,60+10,80+10);
+		    c.play_icon(62,80);
+		    s2.rectangle_button_boundary(60-10,80-10,60+10,80+10);
+		   }
+		 c.doplay();
+		}
+		if(x>=180-10&&x<=180+10&&y>=80-10&&y<=80+10)
+		{ fill_button(180+9,80);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(180,80,10,10);
+		   c.new_icon(180,80);
+		   s1.circle_button_boundary2(180,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(180-10,80-10,180+10,80+10);
+		    c.new_icon(180,80);
+		    s2.rectangle_button_boundary(180-10,80-10,180+10,80+10);
+		   }
+		 c.donew();
+		}
+		if(x>=250-10&&x<=250+10&&y>=80-10&&y<=80+10)
+		{ fill_button(250,78);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(250,80,10,10);
+		   c.tone1(250,80);
+		   s1.circle_button_boundary2(250,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(250-10,80-10,250+10,80+10);
+		    c.tone1(250,80);
+		    s2.rectangle_button_boundary(250-10,80-10,250+10,80+10);
+		   }
+		 mode=1;
+		}
+		if(x>=140-10&&x<=140+10&&y>=80-10&&y<=80+10)
+		{  c.dosave();
+		}
+		if(x>=300-10&&x<=300+10&&y>=80-10&&y<=80+10)
+		{ fill_button(300,78);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(300,80,10,10);
+		   c.tone2(300,80);
+		   s1.circle_button_boundary2(300,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(300-10,80-10,300+10,80+10);
+		    c.tone2(300,80);
+		    s2.rectangle_button_boundary(300-10,80-10,300+10,80+10);
+		   }
+		 mode=2;
+		}
+      //////////////////////////////////////////////////////////////////////////
+	       if(x>=160-10&&x<=160+10&&y>=80-10&&y<=80+10)
+		{ fill_button(168,80);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(160,80,10,10);
+		   c.open_icon(160,80);
+		   s1.circle_button_boundary2(160,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(160-10,80-10,160+10,80+10);
+		    c.open_icon(160,81);
+		    s2.rectangle_button_boundary(160-10,80-10,160+10,80+10);
+		   }
+		   c.doopen();
+		}
+      //////////////////////////////////////////////////////////////////////////
+	       c.showmouseptr();
+	}
+	 if(kbhit())///if keyboard hitted
+	 { key=getch();
+	     if(key!=0)
+	   { if(key==32) //if spacebar
+	     {    fill_button(65,78);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(60,80,10,10);
+		   c.play_icon(62,80);
+		   s1.circle_button_boundary2(60,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(60-10,80-10,60+10,80+10);
+		    c.play_icon(62,80);
+		    s2.rectangle_button_boundary(60-10,80-10,60+10,80+10);
+		   }
+	      c.doplay();
+	     }
+	     if(key==49)    //if 1 pressed
+		{ fill_button(250,78);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(250,80,10,10);
+		   c.tone1(250,80);
+		   s1.circle_button_boundary2(250,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(250-10,80-10,250+10,80+10);
+		    c.tone1(250,80);
+		    s2.rectangle_button_boundary(250-10,80-10,250+10,80+10);
+		   }
+		 mode=1;
+		}
+		if(key==50) //if 2 pressed
+		{ fill_button(300,78);
+		  delay(100);
+		  if(skinvar==1)
+		  { setfillstyle(1,0);
+		   fillellipse(300,80,10,10);
+		   c.tone2(300,80);
+		   s1.circle_button_boundary2(300,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(300-10,80-10,300+10,80+10);
+		    c.tone1(300,80);
+		    s2.rectangle_button_boundary(300-10,80-10,300+10,80+10);
+		   }
+		 mode=2;
+		}
+	     c.tone_conditions();
+	   }
+	 }
+   } ///////////end of while
+}//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+void common::doplay()
+{    tx=55;
+ while(tx<=640)  //this loop moves the triangle for each coloumn
+  {c.triangle(tx,95); //moving triangle
+   setfillstyle(1,0);
+   bar(tx-15,92,tx-5,98);
+	c.showmouseptr();
+	c.getmousepos(&button, &x, &y);
+       if((button &1)==1)
+       {      c.hidemouseptr();
+	      if(x>=80-10&&x<=80+10&&y>=80-10&&y<=80+10)//if clicks on stop icon
+		{ fill_button(80,85);
+		  delay(100);
+		  if(skinvar==1)
+		  {setfillstyle(1,0);
+		   fillellipse(80,80,10,10);
+		   c.stop_icon(80,80);
+		   s1.circle_button_boundary2(80,80,10);
+		   }
+		   if(skinvar==2)
+		   {setfillstyle(1,0);
+		    bar(80-10,80-10,80+10,80+10);
+		    c.stop_icon(80,80);
+		    s2.rectangle_button_boundary(80-10,80-10,80+10,80+10);
+		   }
+		   c.showmouseptr();
+		 stop=1;
+		 goto stp;
+		}
+       }
+       if(kbhit()) //if keyboard hit
+       { ch=getch();
+	 if(ch==32) //if space pressed then stop
+	 { stop=1;
+	   goto stp;
+	 }
+       }
+   for( q=105;q<=325;q+=10)// this loop checks pixel value in each row
+     {  m1=getpixel(tx,q);
+	m2=getpixel(tx+10,q);
+       if(m1==10)
+       { bc=q;
+	c.check(bc);
+       }
+     }
+     q=105;
+   delay(df);
+   tx+=10;
+   stp:
+  if(stop==1)
+   { goto q;
+   }
+  }/////end of while
+  q:
+  stop=0;
+  nosound();
+  setfillstyle(1,0);
+  bar(50,92,640,98);
+  c.triangle(55,95);
+  c.showmouseptr();
+}
+void common::check(int bc)
+{   if(bc==105)
+ {  key=13;
+   c.tone_conditions();
+ }
+ if(bc==115)
+ { key=93;
+   c.tone_conditions();
+ }
+ if(bc==125)
+ { key=39;
+   c.tone_conditions();
+ }
+ if(bc==135)
+ { key=59;
+   c.tone_conditions();
+ }
+ if(bc==145)
+ { key=112;
+   c.tone_conditions();
+ }
+ if(bc==155)
+ { key=108;
+   c.tone_conditions();
+ }
+ if(bc==165)
+ { key=111;
+   c.tone_conditions();
+ }
+ if(bc==175)
+ {key=107;
+   c.tone_conditions();
+ }
+ if(bc==185)
+ { key=106;
+  c.tone_conditions();
+ }
+ if(bc==195)
+ { key=117;
+   c.tone_conditions();
+ }
+ if(bc==205)
+ { key=104;
+   c.tone_conditions();
+ }
+ if(bc==215)
+ { key=121;
+   c.tone_conditions();
+ }
+ if(bc==225)
+ { key=103;
+   c.tone_conditions();
+ }
+ if(bc==235)
+ { key=116;
+   c.tone_conditions();
+ }
+ if(bc==245)
+ { key=102;
+   c.tone_conditions();
+ }
+ if(bc==255)
+ { key=100;
+   c.tone_conditions();
+ }
+ if(bc==265)
+ { key=101;
+   c.tone_conditions();
+ }
+ if(bc==275)
+ { key=115;
+   c.tone_conditions();
+ }
+ if(bc==285)
+ { key=119;
+   c.tone_conditions();
+ }
+ if(bc==295)
+ { key=97;
+   c.tone_conditions();
+ }
+ if(bc==305)
+ {  sound(sa_1);
+    hkeya_1(10);
+    delay(del);
+    if(m2==10&&mode==2)
+    goto a_1;
+    if(m2==10&&mode==1)
+    nosound();
+    if(m2!=10&&mode==2)
+    nosound();
+    if(m2!=10&&mode==1)
+    nosound();
+    a_1:
+    hkeya_1(15);
+ }
+ if(bc==315)
+ { sound(sa_2);
+    hkeya_2(10);
+    delay(del);
+    if(m2==10&&mode==2)
+    goto a_2;
+    if(m2==10&&mode==1)
+    nosound();
+    if(m2!=10&&mode==2)
+    nosound();
+    if(m2!=10&&mode==1)
+    nosound();
+    a_2:
+    hkeya_2(0);
+ }
+ if(bc==325)
+ { sound(sa_3);
+    hkeya_3(10);
+    delay(del);
+    if(m2==10&&mode==2)
+    goto a_3;
+    if(m2==10&&mode==1)
+    nosound();
+    if(m2!=10&&mode==2)
+    nosound();
+    if(m2!=10&&mode==1)
+    nosound();
+    a_3:
+    hkeya_3(15);
+ }
+}
+void common::doopen()
+{ gotoxy(5,23);
+  cout<<"Enter name of file(with extention):";
+  gets(filename2);
+  int zvb=getbkcolor();
+  setcolor(zvb);
+  setfillstyle(1,zvb);
+  bar(10,350,640,480);
+  op=1;
+  r.open(filename2,ios ::in);
+  if(!r)
+  {  gotoxy(5,23);
+     cout<<"That file dose not exist  :(";
+      gotoxy(6,24);
+     cout<<"Press any key to continue";
+     getch();
+     int zvb=getbkcolor();
+     setcolor(zvb);
+     setfillstyle(1,zvb);
+     bar(10,350,640,480);
+     goto xcv;
+  }
+    for( rx=50;rx<=640;++rx)
+    for( ry=100;ry<=330;++ry)
+    { r.read((char*)&pv,sizeof(pv));
+      putpixel(rx,ry,pv);
+    }
+    setcolor(maincolor);
+    line(640,100,640,330);
+    op=0;
+    r.close();
+  c.doplay();
+  xcv:
+}
+void common::dosave()
+{   gotoxy(5,23);
+    cout<<"enter name of file(with extention):";
+    gets(filename1);
+    int zvb=getbkcolor();
+    setcolor(zvb);
+    setfillstyle(1,zvb);
+    bar(10,350,640,480);
+  r.open(filename1,ios::out);
+    for( rx=50;rx<=641;++rx)
+    for( ry=100;ry<=330;++ry)
+    { pv=getpixel(rx,ry);
+      r.write((char*)&pv,sizeof(pv));
+    }
+    r.close();
+}
+///_________________________________________________________________________________
+///////end of definations of common class...........
